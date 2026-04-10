@@ -196,6 +196,12 @@
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
+  @media (min-width: 768px) {
+    .retro-input {
+      padding: 13px 16px;
+      font-size: 15px;
+    }
+  }
   .retro-input::placeholder { color: var(--color-text-muted); }
   .retro-input:focus {
     border-color: var(--color-gold-dim);

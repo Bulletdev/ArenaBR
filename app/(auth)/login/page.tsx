@@ -53,16 +53,16 @@ export default function LoginPage() {
   const [mode, setMode] = useState<LoginMode>("staff")
 
   return (
-    <div className="w-full max-w-sm space-y-6">
+    <div className="w-full max-w-sm md:max-w-md space-y-6">
       <Suspense>
         <ReasonBanner />
       </Suspense>
 
-      <div className="text-center space-y-1">
-        <h1 className="font-display text-2xl font-bold text-[#E8E8E8] uppercase tracking-widest">
+      <div className="text-center space-y-2">
+        <h1 className="font-display text-2xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-widest">
           Acessar plataforma
         </h1>
-        <p className="text-[#8896A4] text-sm">Entre com sua conta ArenaBR</p>
+        <p className="text-[#8896A4] text-sm md:text-base">Entre com sua conta ArenaBR</p>
       </div>
 
       {/* Toggle */}
@@ -70,25 +70,25 @@ export default function LoginPage() {
         <button
           onClick={() => setMode("staff")}
           className={cn(
-            "flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-mono uppercase tracking-widest transition-colors",
+            "flex-1 flex items-center justify-center gap-2 py-3 md:py-4 text-xs md:text-sm font-mono uppercase tracking-widest transition-colors",
             mode === "staff"
               ? "bg-[#C89B3C] text-[#0A0E1A] font-bold"
               : "text-[#8896A4] hover:text-[#E8E8E8]"
           )}
         >
-          <Users size={13} />
+          <Users size={14} />
           Staff / Org
         </button>
         <button
           onClick={() => setMode("player")}
           className={cn(
-            "flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-mono uppercase tracking-widest transition-colors",
+            "flex-1 flex items-center justify-center gap-2 py-3 md:py-4 text-xs md:text-sm font-mono uppercase tracking-widest transition-colors",
             mode === "player"
               ? "bg-[#0596AA] text-[#0A0E1A] font-bold"
               : "text-[#8896A4] hover:text-[#E8E8E8]"
           )}
         >
-          <Sword size={13} />
+          <Sword size={14} />
           Jogador
         </button>
       </div>

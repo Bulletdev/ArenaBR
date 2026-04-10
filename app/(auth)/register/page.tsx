@@ -46,12 +46,12 @@ export default function RegisterPage() {
   const [accountType, setAccountType] = useState<AccountType | null>(null)
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="text-center space-y-1">
-        <h1 className="font-display text-2xl font-bold text-[#E8E8E8] uppercase tracking-widest">
+    <div className="w-full max-w-sm md:max-w-md space-y-6">
+      <div className="text-center space-y-2">
+        <h1 className="font-display text-2xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-widest">
           Criar conta
         </h1>
-        <p className="text-[#8896A4] text-sm">Junte-se à ArenaBR e comece a competir</p>
+        <p className="text-[#8896A4] text-sm md:text-base">Junte-se à ArenaBR e comece a competir</p>
       </div>
 
       {!accountType ? (
