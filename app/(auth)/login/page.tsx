@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -31,11 +31,26 @@ const playerSchema = z.object({
 type StaffForm  = z.infer<typeof staffSchema>
 type PlayerForm = z.infer<typeof playerSchema>
 
+const REASON_BANNER: Record<string, { text: string; color: string }> = {
+  logout:       { text: "Você saiu da plataforma com sucesso.",                            color: "border-[#252D3D] text-[#8896A4]" },
+  expired:      { text: "Sua sessão expirou por segurança. Faça login novamente.",         color: "border-yellow-600/40 text-yellow-400" },
+  unauthorized: { text: "Acesso negado. Faça login para continuar.",                       color: "border-red-600/40 text-red-400" },
+}
+
 export default function LoginPage() {
   const [mode, setMode] = useState<LoginMode>("staff")
+  const searchParams = useSearchParams()
+  const reason = searchParams.get("reason") ?? ""
+  const banner = REASON_BANNER[reason]
 
   return (
     <div className="w-full max-w-sm space-y-6">
+      {banner && (
+        <div className={`border px-4 py-3 text-sm text-center ${banner.color}`}>
+          {banner.text}
+        </div>
+      )}
+
       <div className="text-center space-y-1">
         <h1 className="font-display text-2xl font-bold text-[#E8E8E8] uppercase tracking-widest">
           Acessar plataforma

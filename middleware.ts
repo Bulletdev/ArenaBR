@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
   // Unauthenticated user hitting a protected page → send to login
   if (!token && pathname.startsWith("/dashboard")) {
     const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("reason", "unauthorized")
     loginUrl.searchParams.set("redirect", pathname)
     return NextResponse.redirect(loginUrl)
   }
