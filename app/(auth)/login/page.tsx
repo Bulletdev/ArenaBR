@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -37,19 +37,26 @@ const REASON_BANNER: Record<string, { text: string; color: string }> = {
   unauthorized: { text: "Acesso negado. Faça login para continuar.",                       color: "border-red-600/40 text-red-400" },
 }
 
-export default function LoginPage() {
-  const [mode, setMode] = useState<LoginMode>("staff")
+function ReasonBanner() {
   const searchParams = useSearchParams()
   const reason = searchParams.get("reason") ?? ""
   const banner = REASON_BANNER[reason]
+  if (!banner) return null
+  return (
+    <div className={`border px-4 py-3 text-sm text-center ${banner.color}`}>
+      {banner.text}
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  const [mode, setMode] = useState<LoginMode>("staff")
 
   return (
     <div className="w-full max-w-sm space-y-6">
-      {banner && (
-        <div className={`border px-4 py-3 text-sm text-center ${banner.color}`}>
-          {banner.text}
-        </div>
-      )}
+      <Suspense>
+        <ReasonBanner />
+      </Suspense>
 
       <div className="text-center space-y-1">
         <h1 className="font-display text-2xl font-bold text-[#E8E8E8] uppercase tracking-widest">
