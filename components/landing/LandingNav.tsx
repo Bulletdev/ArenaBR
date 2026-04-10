@@ -31,10 +31,10 @@ export default function LandingNav() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#sobre"         className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Sobre</a>
-          <a href="#como-funciona" className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Como funciona</a>
-          <a href="#campeonatos"   className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Campeonatos</a>
-          <a href="#faq"           className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">FAQ</a>
+          <a href="/#sobre"         className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Sobre</a>
+          <a href="/#como-funciona" className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Como funciona</a>
+          <a href="/#campeonatos"   className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">Campeonatos</a>
+          <a href="/#faq"           className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors">FAQ</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -53,10 +53,10 @@ export default function LandingNav() {
 
       {open && (
         <div className="md:hidden border-t border-[#252D3D] bg-[#0A0E1A] px-6 py-4 space-y-3">
-          <a href="#sobre"         className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Sobre</a>
-          <a href="#como-funciona" className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Como funciona</a>
-          <a href="#campeonatos"   className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Campeonatos</a>
-          <a href="#faq"           className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>FAQ</a>
+          <a href="/#sobre"         className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Sobre</a>
+          <a href="/#como-funciona" className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Como funciona</a>
+          <a href="/#campeonatos"   className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>Campeonatos</a>
+          <a href="/#faq"           className="block text-sm text-[#8896A4]" onClick={() => setOpen(false)}>FAQ</a>
           <div className="flex gap-3 pt-2">
             <Link href="/login"    className="flex-1"><Button variant="ghost" className="w-full">Entrar</Button></Link>
             <Link href="/register" className="flex-1"><Button className="w-full">Inscreva-se</Button></Link>
