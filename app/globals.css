@@ -1,0 +1,361 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Fonts ─────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
+
+/* ─── CSS Variables ──────────────────────────────────────────── */
+:root {
+  --color-navy:       #0A0E1A;
+  --color-card:       #0F1823;
+  --color-muted:      #1A2235;
+  --color-border:     #252D3D;
+  --color-gold:       #C89B3C;
+  --color-gold-dim:   #8A6A28;
+  --color-teal:       #0596AA;
+  --color-teal-dim:   #047A8A;
+  --color-success:    #00D364;
+  --color-danger:     #FF4444;
+  --color-text:       #E8E8E8;
+  --color-text-muted: #8896A4;
+
+  --shadow-gold: 0 0 12px rgba(200, 155, 60, 0.35);
+  --shadow-teal: 0 0 12px rgba(5, 150, 170, 0.35);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { color-scheme: dark; scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-text);
+    font-family: "Exo 2", sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-card); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-dim); }
+}
+
+/* ─── Retro UI Components ─────────────────────────────────────── */
+@layer components {
+
+  /* Panel */
+  .retro-panel {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    position: relative;
+  }
+
+  .retro-panel-gold {
+    background: var(--color-card);
+    border: 1px solid var(--color-gold-dim);
+    box-shadow: var(--shadow-gold);
+    position: relative;
+  }
+
+  .retro-panel-teal {
+    background: var(--color-card);
+    border: 1px solid var(--color-teal-dim);
+    box-shadow: var(--shadow-teal);
+    position: relative;
+  }
+
+  /* Cantos decorativos HUD */
+  .hud-corners::before,
+  .hud-corners::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--color-gold);
+    border-style: solid;
+  }
+  .hud-corners::before {
+    top: -1px; left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+  .hud-corners::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  /* Scanlines */
+  .scanlines {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.07) 2px,
+      rgba(0, 0, 0, 0.07) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Gradient text gold */
+  .gradient-gold {
+    background: linear-gradient(135deg, #E8C97A 0%, #C89B3C 50%, #8A6A28 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Badge */
+  .retro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid currentColor;
+  }
+
+  /* Separador retro */
+  .retro-sep {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-gold-dim) 20%,
+      var(--color-gold) 50%,
+      var(--color-gold-dim) 80%,
+      transparent 100%
+    );
+    border: none;
+  }
+
+  /* Stat box */
+  .retro-stat {
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    padding: 12px 16px;
+  }
+  .retro-stat-value {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 1.5rem;
+    color: var(--color-gold);
+  }
+  .retro-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  /* Table */
+  .retro-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .retro-table th {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .retro-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(37, 45, 61, 0.5);
+    font-size: 14px;
+  }
+  .retro-table tr:hover td {
+    background: var(--color-muted);
+  }
+
+  /* Input */
+  .retro-input {
+    width: 100%;
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 10px 14px;
+    font-family: "Exo 2", sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .retro-input::placeholder { color: var(--color-text-muted); }
+  .retro-input:focus {
+    border-color: var(--color-gold-dim);
+    box-shadow: 0 0 0 2px rgba(200, 155, 60, 0.15);
+  }
+
+  /* Label */
+  .retro-label {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--color-gold);
+    color: #0A0E1A;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+  .btn-primary:hover {
+    background: #D4A84A;
+    box-shadow: var(--shadow-gold);
+  }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--color-gold);
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 9px 24px;
+    border: 1px solid var(--color-gold-dim);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .btn-secondary:hover {
+    background: rgba(200, 155, 60, 0.08);
+    border-color: var(--color-gold);
+    box-shadow: var(--shadow-gold);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: "Exo 2", sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .btn-ghost:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+
+  .btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--color-danger);
+    font-family: "Exo 2", sans-serif;
+    font-size: 14px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 68, 68, 0.4);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-danger:hover { background: rgba(255, 68, 68, 0.08); }
+
+  /* Hover lift — cards interativos */
+  .hover-lift {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+  }
+  .hover-lift:hover {
+    transform: translateY(-3px);
+  }
+  .hover-lift-gold:hover {
+    box-shadow: 0 8px 32px rgba(200, 155, 60, 0.2);
+  }
+  .hover-lift-teal:hover {
+    box-shadow: 0 8px 32px rgba(5, 150, 170, 0.2);
+  }
+
+  /* Stat strip */
+  .stat-strip {
+    background: linear-gradient(90deg, rgba(200,155,60,0.04) 0%, rgba(5,150,170,0.04) 100%);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Gradient animated border */
+  .animated-border-gold {
+    position: relative;
+  }
+  .animated-border-gold::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, var(--color-gold-dim), transparent, var(--color-gold-dim)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Nav link */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 0.15s, background 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .nav-link.active {
+    color: var(--color-gold);
+    border-left-color: var(--color-gold);
+    background: rgba(200, 155, 60, 0.06);
+  }
+}
