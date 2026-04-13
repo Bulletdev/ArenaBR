@@ -119,9 +119,9 @@ function StaffLoginForm() {
     setLoading(true)
     try {
       const res = await authApi.login(data.email, data.password)
-      setAuth(res.data.user)
+      setAuth(res.data.user, res.data.organization ?? null)
       toast.success("Login realizado!")
-      router.push("/dashboard")
+      router.push("/dashboard/campeonatos")
     } catch (err) {
       const msg = err instanceof Error ? err.message : "E-mail ou senha incorretos."
       toast.error(msg)
@@ -173,7 +173,7 @@ function PlayerLoginForm() {
       const res = await authApi.playerLogin(data.player_email, data.password)
       setPlayerAuth(res.data)
       toast.success("Login realizado!")
-      router.push("/dashboard")
+      router.push("/dashboard/campeonatos")
     } catch (err) {
       const msg = err instanceof Error ? err.message : "E-mail ou senha incorretos."
       toast.error(msg)

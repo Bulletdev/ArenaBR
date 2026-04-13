@@ -1,4 +1,4 @@
-import type { User, Player } from "@/types"
+import type { User, Player, Tournament, TournamentTeam, TournamentMatch, MatchReport } from "@/types"
 import type { PlayerSession } from "@/stores/auth"
 
 // Todas as chamadas passam por Next.js API Routes (proxy) para:
@@ -31,7 +31,7 @@ export interface ApiSuccess<T> {
 // ─── Auth (via proxy /api/auth/*) ─────────────────────────────
 export const authApi = {
   login: (email: string, password: string) =>
-    request<ApiSuccess<{ user: User; access_token: string; refresh_token: string }>>(
+    request<ApiSuccess<{ user: User; organization: import("@/types").Organization | null; access_token: string; refresh_token: string }>>(
       "/api/auth/login",
       { method: "POST", body: JSON.stringify({ email, password }) }
     ),
@@ -86,20 +86,90 @@ export const playerApi = {
     }>>("/api/free-agents"),
 }
 
-// ─── Championships (mock — módulo ArenaBR a implementar) ──────
-export const championshipApi = {
-  list: () => Promise.reject(new Error("Championship module not implemented")),
-  show: (_id: number) => Promise.reject(new Error("Championship module not implemented")),
-  standings: (_id: number) => Promise.reject(new Error("Championship module not implemented")),
+// ─── Tournaments ──────────────────────────────────────────────
+export const tournamentApi = {
+  list: () =>
+    request<ApiSuccess<Tournament[]>>("/api/tournaments"),
+
+  show: (id: string) =>
+    request<ApiSuccess<Tournament>>(`/api/tournaments/${id}`),
+
+  create: (payload: Partial<Tournament>) =>
+    request<ApiSuccess<Tournament>>("/api/tournaments", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  update: (id: string, payload: Partial<Tournament>) =>
+    request<ApiSuccess<Tournament>>(`/api/tournaments/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }),
+
+  generateBracket: (id: string) =>
+    request<ApiSuccess<Tournament>>(`/api/tournaments/${id}/generate-bracket`, {
+      method: "POST",
+    }),
+
+  // ─── Teams / enrollment ─────────────────────────────────────
+  getTeams: (tournamentId: string) =>
+    request<ApiSuccess<TournamentTeam[]>>(`/api/tournaments/${tournamentId}/teams`),
+
+  enrollTeam: (tournamentId: string, payload: { team_name?: string; team_tag?: string; logo_url?: string }) =>
+    request<ApiSuccess<TournamentTeam>>(`/api/tournaments/${tournamentId}/teams`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  approveTeam: (tournamentId: string, teamId: string) =>
+    request<ApiSuccess<TournamentTeam>>(`/api/tournaments/${tournamentId}/teams/${teamId}/approve`, {
+      method: "PATCH",
+    }),
+
+  rejectTeam: (tournamentId: string, teamId: string) =>
+    request<ApiSuccess<TournamentTeam>>(`/api/tournaments/${tournamentId}/teams/${teamId}/reject`, {
+      method: "PATCH",
+    }),
+
+  // ─── Matches ────────────────────────────────────────────────
+  getMatches: (tournamentId: string) =>
+    request<ApiSuccess<TournamentMatch[]>>(`/api/tournaments/${tournamentId}/matches`),
+
+  getMatch: (tournamentId: string, matchId: string) =>
+    request<ApiSuccess<TournamentMatch & { my_team_checked_in: boolean | null; opponent_checked_in: boolean | null }>>
+      (`/api/tournaments/${tournamentId}/matches/${matchId}`),
+
+  checkin: (tournamentId: string, matchId: string) =>
+    request<ApiSuccess<{ checked_in: boolean; match_status: string }>>
+      (`/api/tournaments/${tournamentId}/matches/${matchId}/checkin`, { method: "POST" }),
+
+  // ─── Match reports ──────────────────────────────────────────
+  getReport: (tournamentId: string, matchId: string) =>
+    request<ApiSuccess<{ my_report: MatchReport | null; opponent_reported: boolean; match_status: string }>>
+      (`/api/tournaments/${tournamentId}/matches/${matchId}/report`),
+
+  submitReport: (tournamentId: string, matchId: string, payload: {
+    team_a_score: number
+    team_b_score: number
+    evidence_url: string
+  }) =>
+    request<ApiSuccess<{ status: string; report: MatchReport }>>
+      (`/api/tournaments/${tournamentId}/matches/${matchId}/report`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+
+  adminResolveDispute: (tournamentId: string, matchId: string, winnerId: string) =>
+    request<ApiSuccess<TournamentMatch>>(
+      `/api/tournaments/${tournamentId}/matches/${matchId}/report/admin-resolve`,
+      {
+        method: "POST",
+        body: JSON.stringify({ winner_team_id: winnerId }),
+      }
+    ),
 }
 
-// ─── Enrollment (mock — módulo ArenaBR a implementar) ─────────
-export const enrollmentApi = {
-  enroll: (_payload: { championship_id: number; type: "team" | "free_agent"; player_ids?: number[] }) =>
-    Promise.reject(new Error("Enrollment module not implemented")),
-}
-
-// ─── Invites (mock — módulo ArenaBR a implementar) ────────────
+// ─── Invites (mock — módulo a implementar) ────────────────────
 export const inviteApi = {
   list: () => Promise.reject(new Error("Invite module not implemented")),
   accept: (_id: number) => Promise.reject(new Error("Invite module not implemented")),

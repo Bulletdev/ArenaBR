@@ -22,9 +22,10 @@ export interface User {
 
 // ─── Organization — espelha OrganizationSerializer ────────────
 export interface Organization {
-  id: number
+  id: string          // UUID
   name: string
   slug: string
+  team_tag: string | null
   region: string
   region_display: string
   tier: string
@@ -221,4 +222,111 @@ export interface ApiResponse<T> {
     total_pages: number
     total_count: number
   }
+}
+
+// ─── Tournament — espelha TournamentSerializer ────────────────
+export type TournamentStatus = "draft" | "registration_open" | "seeding" | "in_progress" | "finished" | "cancelled"
+export type TournamentFormat = "double_elimination" | "single_elimination"
+export type TournamentGame   = "league_of_legends" | "valorant" | "cs2"
+
+export interface Tournament {
+  id: string
+  name: string
+  game: TournamentGame
+  format: TournamentFormat
+  status: TournamentStatus
+  max_teams: number
+  enrolled_teams_count: number
+  entry_fee_cents: number
+  prize_pool_cents: number
+  bo_format: number
+  scheduled_start_at: string | null
+  finished_at: string | null
+  bracket_generated: boolean
+  slots_available: boolean
+  created_at: string
+  updated_at: string
+}
+
+// ─── TournamentTeam — espelha TournamentTeamSerializer ────────
+export type TournamentTeamStatus = "pending" | "approved" | "rejected" | "withdrawn" | "disqualified"
+
+export interface RosterSnapshot {
+  player_id: string
+  summoner_name: string
+  role: string
+  position: "starter" | "substitute"
+  locked_at: string
+}
+
+export interface TournamentTeam {
+  id: string
+  tournament_id: string
+  organization_id: string
+  team_name: string
+  team_tag: string
+  logo_url: string | null
+  status: TournamentTeamStatus
+  seed: number | null
+  approved_at: string | null
+  rejected_at: string | null
+  enrolled_at: string | null
+  roster: RosterSnapshot[]
+}
+
+// ─── TournamentMatch — espelha TournamentMatchSerializer ──────
+export type TournamentMatchStatus =
+  | "scheduled"
+  | "checkin_open"
+  | "in_progress"
+  | "awaiting_report"
+  | "awaiting_confirm"
+  | "disputed"
+  | "confirmed"
+  | "completed"
+  | "walkover"
+
+export interface TournamentMatch {
+  id: string
+  tournament_id: string
+  bracket_side: BracketSide
+  round_label: string       // "UB Round 1", "LB Round 2", "Grand Final"
+  round_order: number
+  match_number: number
+  bo_format: number
+  status: TournamentMatchStatus
+  team_a_id: string | null
+  team_a_name: string | null
+  team_a_score: number
+  team_b_id: string | null
+  team_b_name: string | null
+  team_b_score: number
+  winner_id: string | null
+  loser_id: string | null
+  next_match_winner_id: string | null
+  next_match_loser_id: string | null
+  checkin_deadline_at: string | null
+  wo_deadline_at: string | null
+  started_at: string | null
+  completed_at: string | null
+  // from getMatch (authenticated)
+  my_team_checked_in?: boolean | null
+  opponent_checked_in?: boolean | null
+  my_team_has_reported?: boolean | null
+}
+
+// ─── MatchReport — espelha MatchReportSerializer ──────────────
+export type MatchReportStatus = "submitted" | "confirmed" | "disputed"
+
+export interface MatchReport {
+  id: string
+  tournament_match_id: string
+  tournament_team_id: string
+  team_a_score: number
+  team_b_score: number
+  evidence_url: string
+  status: MatchReportStatus
+  submitted_at: string
+  confirmed_at: string | null
+  deadline_at: string
 }

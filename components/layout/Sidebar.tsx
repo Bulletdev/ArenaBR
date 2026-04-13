@@ -29,10 +29,10 @@ export default function Sidebar() {
   const isPlayer = !!player && !user
 
   const navItems: { href: string; label: string; icon: React.ReactNode; badge?: number }[] = [
-    { href: "/dashboard",           label: "Campeonatos", icon: <IconTrophy size={16} /> },
-    { href: "/dashboard/times",     label: "Times",       icon: <IconRoster size={16} /> },
-    { href: "/dashboard/jogadores", label: "Free Agents", icon: <IconScouting size={16} /> },
-    { href: "/dashboard/perfil",    label: "Meu Perfil",  icon: <IconPerson size={16} /> },
+    { href: "/dashboard/campeonatos", label: "Campeonatos", icon: <IconTrophy size={16} /> },
+    { href: "/dashboard/times",       label: "Times",       icon: <IconRoster size={16} /> },
+    { href: "/dashboard/jogadores",   label: "Free Agents", icon: <IconScouting size={16} /> },
+    { href: "/dashboard/perfil",      label: "Meu Perfil",  icon: <IconPerson size={16} /> },
     ...(isPlayer ? [{
       href: "/dashboard/convites",
       label: "Convites",
@@ -58,7 +58,7 @@ export default function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 py-3">
         {navItems.map(({ href, label, icon, badge }) => {
-          const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href))
+          const active = pathname === href || pathname.startsWith(href + "/")
           return (
             <Link
               key={href}

@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { User } from "@/types"
+import type { User, Organization } from "@/types"
 
 // Jogador auto-cadastrado via ArenaBR (token entity_type: 'player')
 export interface PlayerSession {
@@ -25,10 +25,12 @@ export interface PlayerSession {
 interface AuthState {
   // Staff (coach/owner/analista) — token user
   user: User | null
+  // Organization the staff belongs to
+  organization: Organization | null
   // Jogador auto-cadastrado — token player
   player: PlayerSession | null
   isAuthenticated: boolean
-  setAuth: (user: User) => void
+  setAuth: (user: User, organization?: Organization | null) => void
   setPlayerAuth: (player: PlayerSession) => void
   logout: () => void
   updateUser: (user: Partial<User>) => void
@@ -38,10 +40,12 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      organization: null,
       player: null,
       isAuthenticated: false,
 
-      setAuth: (user) => set({ user, player: null, isAuthenticated: true }),
+      setAuth: (user, organization = null) =>
+        set({ user, organization, player: null, isAuthenticated: true }),
 
       setPlayerAuth: (player) => set({ player, user: null, isAuthenticated: true }),
 
@@ -59,6 +63,7 @@ export const useAuthStore = create<AuthState>()(
       name: "arena-auth",
       partialize: (state) => ({
         user: state.user,
+        organization: state.organization,
         player: state.player,
         isAuthenticated: state.isAuthenticated,
       }),
