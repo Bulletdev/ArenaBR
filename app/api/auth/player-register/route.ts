@@ -5,11 +5,17 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333/api/v1
 export async function POST(req: NextRequest) {
   const rawBody = await req.text()
 
+  const clientIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    ""
+
   const upstream = await fetch(`${API_URL}/auth/player-register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "User-Agent": "ArenaBR/1.0",
+      ...(clientIp && { "X-Forwarded-For": clientIp }),
     },
     body: rawBody,
   })

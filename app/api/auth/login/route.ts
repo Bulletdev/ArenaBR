@@ -5,8 +5,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333/api/v1
 export async function POST(req: NextRequest) {
   const rawBody = await req.text()
 
-  console.log("[ArenaBR proxy] login body:", rawBody)
-
   const upstream = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -17,8 +15,6 @@ export async function POST(req: NextRequest) {
   })
 
   const data = await upstream.json()
-
-  console.log("[ArenaBR proxy] upstream status:", upstream.status, JSON.stringify(data))
 
   if (!upstream.ok) {
     return NextResponse.json(data, { status: upstream.status })
