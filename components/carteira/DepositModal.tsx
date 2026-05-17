@@ -4,6 +4,14 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useDeposit } from "@/hooks/useDeposit"
 
+function friendlyError(msg: string): string {
+  if (msg.includes("401") || msg.includes("403")) return "Servico de pagamento indisponivel. Tente novamente mais tarde."
+  if (msg.includes("timeout") || msg.includes("Timeout")) return "O servico demorou demais para responder. Tente novamente."
+  if (msg.includes("insufficient_funds")) return "Saldo insuficiente."
+  if (msg.includes("invalid_pix_key")) return "Chave PIX invalida."
+  return "Erro ao processar pagamento. Tente novamente."
+}
+
 function formatBRL(cents: number): string {
   return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 }
@@ -88,7 +96,7 @@ export default function DepositModal({ onClose }: DepositModalProps) {
               </div>
               {error && (
                 <p className="text-sm" style={{ color: "var(--color-danger)" }}>
-                  {error}
+                  {friendlyError(error)}
                 </p>
               )}
               <button

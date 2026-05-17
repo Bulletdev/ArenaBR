@@ -70,8 +70,10 @@ async function propayFetch<T>(
   })
 
   if (!res.ok) {
-    const body = await res.json().catch(() => ({})) as { error?: { message?: string } }
-    throw new Error(body?.error?.message ?? `ProPay error ${res.status}`)
+    const body = await res.json().catch(() => ({})) as { error?: string | { message?: string } }
+    const errMsg =
+      typeof body?.error === "string" ? body.error : body?.error?.message
+    throw new Error(errMsg ?? `ProPay error ${res.status}`)
   }
 
   return res.json() as Promise<T>
