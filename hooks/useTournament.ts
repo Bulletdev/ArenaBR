@@ -123,3 +123,16 @@ export function useGenerateBracket(tournamentId: string) {
     },
   })
 }
+
+// ─── Withdraw team (captain) ──────────────────────────────────
+export function useWithdrawTeam(tournamentId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (teamId: string) =>
+      tournamentApi.withdrawTeam(tournamentId, teamId).then(r => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tournamentKeys.teams(tournamentId) })
+      qc.invalidateQueries({ queryKey: tournamentKeys.detail(tournamentId) })
+    },
+  })
+}

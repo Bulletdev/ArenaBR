@@ -25,16 +25,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           className={cn(
             "retro-input",
-            error && "border-[#FF4444] focus:border-[#FF4444] focus:shadow-[0_0_0_2px_rgba(255,68,68,0.15)]",
+            error && "border-[var(--color-danger)] focus:border-[var(--color-danger)] focus:shadow-[0_0_0_2px_rgba(220,38,38,0.15)]",
             className
           )}
           {...props}
         />
         {error && (
-          <span className="text-[#FF4444] text-xs font-mono">{error}</span>
+          <span className="text-[var(--color-danger)] text-xs font-mono">{error}</span>
         )}
         {hint && !error && (
-          <span className="text-[#8896A4] text-xs">{hint}</span>
+          <span className="text-muted text-xs">{hint}</span>
         )}
       </div>
     )

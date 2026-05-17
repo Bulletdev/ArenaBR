@@ -14,6 +14,8 @@ import {
   IconTrophy, IconRoster, IconDollarSign, IconCalendar, IconBarChart,
 } from "@/components/ui/NavIcons"
 import { useTournaments, useTournamentTeams, useEnrollTeam, useCreateTournament } from "@/hooks/useTournament"
+import { useWallet } from "@/hooks/useWallet"
+import { SkeletonCard } from "@/components/ui/Skeleton"
 import { useAuthStore } from "@/stores/auth"
 import { formatCurrency, formatDate } from "@/lib/utils"
 import type { Tournament, TournamentStatus, TournamentGame, TournamentFormat } from "@/types"
@@ -28,11 +30,11 @@ const STATUS_LABEL: Record<TournamentStatus, string> = {
   cancelled:         "Cancelado",
 }
 
-const STATUS_VARIANT: Record<TournamentStatus, "success" | "teal" | "muted" | "gold"> = {
+const STATUS_VARIANT: Record<TournamentStatus, "success" | "crimson" | "muted" | "gold"> = {
   draft:             "muted",
   registration_open: "success",
   seeding:           "gold",
-  in_progress:       "teal",
+  in_progress:       "crimson",
   finished:          "muted",
   cancelled:         "muted",
 }
@@ -124,7 +126,7 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
     )
   }
 
-  const selectClass = "w-full bg-[#0A0E1A] border border-[#252D3D] text-[#E8E8E8] text-xs font-mono px-3 py-2 focus:border-[#C89B3C] outline-none"
+  const selectClass = "w-full bg-black border border-border text-text text-xs font-mono px-3 py-2 focus:border-crimson outline-none"
 
   const fmtInfo = FORMAT_OPTIONS.find(f => f.value === format)!
   const boInfo  = BO_INFO[boFormat]
@@ -155,15 +157,15 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
                 className={cn(
                   "relative px-3 py-2.5 border text-xs font-mono text-left transition-all",
                   !g.available
-                    ? "border-[#1A2235] text-[#4A5568] cursor-not-allowed bg-[#0A0E1A]"
+                    ? "border-elevated text-muted cursor-not-allowed bg-black"
                     : game === g.value
-                    ? "border-[#C89B3C] text-[#C89B3C] bg-[rgba(200,155,60,0.08)]"
-                    : "border-[#252D3D] text-[#8896A4] hover:border-[#8896A4] hover:text-[#E8E8E8]",
+                    ? "border-crimson text-crimson bg-[rgba(185,28,28,0.06)]"
+                    : "border-border text-muted hover:border-muted hover:text-text",
                 )}
               >
                 {g.label}
                 {!g.available && (
-                  <span className="absolute top-1 right-1.5 font-mono text-[9px] text-[#4A5568] uppercase tracking-widest">
+                  <span className="absolute top-1 right-1.5 font-mono text-[9px] text-muted uppercase tracking-widest">
                     em breve
                   </span>
                 )}
@@ -185,15 +187,15 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
                 className={cn(
                   "relative px-3 py-2 border text-xs font-mono text-left transition-all",
                   !f.available
-                    ? "border-[#1A2235] text-[#4A5568] cursor-not-allowed bg-[#0A0E1A]"
+                    ? "border-elevated text-muted cursor-not-allowed bg-black"
                     : format === f.value
-                    ? "border-[#C89B3C] text-[#C89B3C] bg-[rgba(200,155,60,0.08)]"
-                    : "border-[#252D3D] text-[#8896A4] hover:border-[#8896A4] hover:text-[#E8E8E8]",
+                    ? "border-crimson text-crimson bg-[rgba(185,28,28,0.06)]"
+                    : "border-border text-muted hover:border-muted hover:text-text",
                 )}
               >
                 {f.label}
                 {!f.available && (
-                  <span className="block text-[9px] text-[#4A5568] uppercase tracking-widest mt-0.5">
+                  <span className="block text-[9px] text-muted uppercase tracking-widest mt-0.5">
                     em breve
                   </span>
                 )}
@@ -201,9 +203,9 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
             ))}
           </div>
           {/* Descrição dinâmica do formato */}
-          <div className="px-3 py-2.5 border border-[#252D3D] bg-[#0A0E1A] space-y-1">
-            <p className="text-xs text-[#E8E8E8] leading-relaxed">{fmtInfo.desc}</p>
-            <p className="text-[10px] text-[#00D364] font-mono">{fmtInfo.rec}</p>
+          <div className="px-3 py-2.5 border border-border bg-black space-y-1">
+            <p className="text-xs text-text leading-relaxed">{fmtInfo.desc}</p>
+            <p className="text-[10px] text-success font-mono">{fmtInfo.rec}</p>
           </div>
         </div>
 
@@ -219,8 +221,8 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
                 className={cn(
                   "px-3 py-2 border text-xs font-mono text-center transition-all",
                   boFormat === bo
-                    ? "border-[#C89B3C] text-[#C89B3C] bg-[rgba(200,155,60,0.08)]"
-                    : "border-[#252D3D] text-[#8896A4] hover:border-[#8896A4] hover:text-[#E8E8E8]",
+                    ? "border-crimson text-crimson bg-[rgba(185,28,28,0.06)]"
+                    : "border-border text-muted hover:border-muted hover:text-text",
                 )}
               >
                 BO{bo}
@@ -228,8 +230,8 @@ function CreateTournamentModal({ onClose }: { onClose: () => void }) {
             ))}
           </div>
           {/* Descrição dinâmica do BO */}
-          <div className="px-3 py-2.5 border border-[#252D3D] bg-[#0A0E1A]">
-            <p className="text-xs text-[#E8E8E8] leading-relaxed">{boInfo.desc}</p>
+          <div className="px-3 py-2.5 border border-border bg-black">
+            <p className="text-xs text-text leading-relaxed">{boInfo.desc}</p>
           </div>
         </div>
 
@@ -296,11 +298,15 @@ function EnrollModal({
   const [teamTag,  setTeamTag]  = useState(organization?.team_tag ?? "")
   const [logoUrl,  setLogoUrl]  = useState(organization?.logo_url ?? "")
   const { mutate: enroll, isPending } = useEnrollTeam(tournament.id)
+  const { data: wallet } = useWallet()
 
+  const hasFee = tournament.entry_fee_cents > 0
+  const balanceCents = wallet?.balance_cents ?? 0
+  const insufficientFunds = hasFee && balanceCents < tournament.entry_fee_cents
   const valid = teamName.trim().length >= 2 && teamTag.trim().length >= 2
 
   const handleSubmit = () => {
-    if (!valid) return
+    if (!valid || insufficientFunds) return
     enroll(
       { team_name: teamName.trim(), team_tag: teamTag.trim().toUpperCase(), logo_url: logoUrl.trim() || undefined },
       {
@@ -316,12 +322,20 @@ function EnrollModal({
   return (
     <Modal open title={`Inscrever no ${tournament.name}`} onClose={onClose} size="sm">
       <div className="space-y-4">
-        <p className="text-xs text-[#8896A4]">
-          Sua inscrição ficará com status <strong className="text-[#C89B3C]">Pendente</strong> até aprovação do staff.
-          {tournament.entry_fee_cents > 0 && (
-            <> O valor da inscrição ({formatCurrency(tournament.entry_fee_cents / 100)}) será cobrado via Discord após aprovação.</>
+        <p className="text-xs text-muted">
+          Sua inscrição ficará com status <strong className="text-gold">Pendente</strong> até aprovação do staff.
+          {hasFee && (
+            <> Taxa de inscrição: <strong className="text-gold">{formatCurrency(tournament.entry_fee_cents / 100)}</strong> — debitada do saldo após aprovação.</>
           )}
         </p>
+        {insufficientFunds && (
+          <div className="border border-danger/40 bg-danger/5 px-4 py-3 text-xs text-danger font-mono">
+            Saldo insuficiente. Seu saldo: <strong>{formatCurrency(balanceCents / 100)}</strong> — necessário: <strong>{formatCurrency(tournament.entry_fee_cents / 100)}</strong>.{" "}
+            <Link href="/dashboard/carteira" className="underline hover:text-text transition-colors" onClick={onClose}>
+              Depositar agora
+            </Link>
+          </div>
+        )}
 
         <Input
           label="Nome do time"
@@ -349,7 +363,7 @@ function EnrollModal({
 
         <Button
           className="w-full"
-          disabled={!valid || isPending}
+          disabled={!valid || isPending || insufficientFunds}
           onClick={handleSubmit}
         >
           <IconTrophy size={14} />
@@ -381,12 +395,12 @@ function TournamentCard({ tournament }: { tournament: Tournament }) {
 
   return (
     <>
-      <RetroPanel variant="gold" corners className="flex flex-col gap-4">
+      <RetroPanel variant="crimson" corners className="flex flex-col gap-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
-            <IconTrophy size={16} className="text-[#C89B3C] shrink-0" />
-            <h2 className="font-display text-lg font-bold text-[#E8E8E8] uppercase tracking-wider truncate">
+            <IconTrophy size={16} className="text-crimson shrink-0" />
+            <h2 className="font-display text-lg font-bold text-text uppercase tracking-wider truncate">
               {tournament.name}
             </h2>
           </div>
@@ -397,40 +411,40 @@ function TournamentCard({ tournament }: { tournament: Tournament }) {
 
         {/* Game + format */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#4A5568] border border-[#252D3D] px-2 py-0.5">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted border border-border px-2 py-0.5">
             {GAME_LABEL[tournament.game] ?? tournament.game}
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#4A5568] border border-[#252D3D] px-2 py-0.5">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted border border-border px-2 py-0.5">
             {FORMAT_LABEL[tournament.format] ?? tournament.format}
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#4A5568] border border-[#252D3D] px-2 py-0.5">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted border border-border px-2 py-0.5">
             BO{tournament.bo_format}
           </span>
         </div>
 
         {/* Meta grid */}
         <div className="flex-1 grid grid-cols-2 gap-y-2 gap-x-3 text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-[#00D364]">
+          <div className="flex items-center gap-1.5 text-success">
             <IconDollarSign size={11} className="shrink-0" />
             <span className="font-bold">{formatCurrency(tournament.prize_pool_cents / 100)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[#8896A4]">
+          <div className="flex items-center gap-1.5 text-muted">
             <IconRoster size={11} className="shrink-0" />
             <span>
               {tournament.enrolled_teams_count}/{tournament.max_teams} times
               {!hasSlots && (
-                <span className="text-[#FF4444] ml-1">· Lotado</span>
+                <span className="text-danger ml-1">· Lotado</span>
               )}
             </span>
           </div>
           {tournament.entry_fee_cents > 0 && (
-            <div className="flex items-center gap-1.5 text-[#C89B3C]">
+            <div className="flex items-center gap-1.5 text-gold">
               <IconDollarSign size={11} className="shrink-0" />
               <span>{formatCurrency(tournament.entry_fee_cents / 100)} inscrição</span>
             </div>
           )}
           {tournament.scheduled_start_at && (
-            <div className="flex items-center gap-1.5 text-[#8896A4]">
+            <div className="flex items-center gap-1.5 text-muted">
               <IconCalendar size={11} className="shrink-0" />
               <span>{formatDate(tournament.scheduled_start_at)}</span>
             </div>
@@ -446,15 +460,15 @@ function TournamentCard({ tournament }: { tournament: Tournament }) {
             </Button>
           </Link>
           {myEnrollment && (
-            <div className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-[#252D3D] font-mono text-xs">
+            <div className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-border font-mono text-xs">
               <span className={
-                myEnrollment.status === "approved"  ? "text-[#00D364]" :
-                myEnrollment.status === "rejected"  ? "text-[#FF4444]" :
-                myEnrollment.status === "withdrawn" ? "text-[#4A5568]" : "text-[#C89B3C]"
+                myEnrollment.status === "approved"  ? "text-success" :
+                myEnrollment.status === "rejected"  ? "text-danger" :
+                myEnrollment.status === "withdrawn" ? "text-muted" : "text-gold"
               }>
                 {myEnrollment.status === "approved"  ? "✓ Aprovado" :
                  myEnrollment.status === "rejected"  ? "✗ Rejeitado" :
-                 myEnrollment.status === "withdrawn" ? "Retirado"   : "⏳ Aguardando"}
+                 myEnrollment.status === "withdrawn" ? "Retirado"   : "Aguardando"}
               </span>
             </div>
           )}
@@ -505,7 +519,7 @@ export default function CampeonatosPage() {
       <div className="flex items-start justify-between">
         <div>
           <p className="retro-label">ArenaBR</p>
-          <h1 className="font-display text-3xl font-bold text-[#E8E8E8] uppercase tracking-wider">
+          <h1 className="font-display text-3xl font-bold text-text uppercase tracking-wider">
             Campeonatos
           </h1>
         </div>
@@ -520,7 +534,7 @@ export default function CampeonatosPage() {
       <hr className="retro-sep" />
 
       {/* Filter tabs */}
-      <div role="tablist" className="flex gap-1 border-b border-[#252D3D] -mb-3 overflow-x-auto">
+      <div role="tablist" className="flex gap-1 border-b border-border -mb-3 overflow-x-auto">
         {FILTERS.map(f => (
           <button
             key={f.key}
@@ -530,8 +544,8 @@ export default function CampeonatosPage() {
             className={cn(
               "px-4 py-2.5 text-xs font-mono uppercase tracking-wider transition-colors whitespace-nowrap shrink-0",
               filter === f.key
-                ? "text-[#C89B3C] border-b-2 border-[#C89B3C] -mb-px"
-                : "text-[#8896A4] hover:text-[#E8E8E8]",
+                ? "text-crimson border-b-2 border-crimson -mb-px"
+                : "text-muted hover:text-text",
             )}
           >
             {f.label}
@@ -542,14 +556,17 @@ export default function CampeonatosPage() {
       {/* Content */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2].map(i => (
-            <div key={i} className="retro-panel h-56 animate-pulse" />
+          {[1, 2].map((i) => (
+            <SkeletonCard key={i} lines={5} />
           ))}
         </div>
       ) : visible.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="font-mono text-sm text-[#4A5568]">
-            Nenhum torneio encontrado.
+          <p className="font-mono text-muted text-sm uppercase tracking-wider">
+            Nenhum campeonato encontrado
+          </p>
+          <p className="text-muted/60 text-xs mt-2">
+            Tente outro filtro ou aguarde novos campeonatos.
           </p>
         </div>
       ) : (

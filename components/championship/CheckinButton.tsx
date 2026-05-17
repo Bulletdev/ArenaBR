@@ -50,7 +50,7 @@ export default function CheckinButton({
   const { mutate: checkin, isPending } = useCheckin(tournamentId, matchId)
 
   const isExpired  = remaining !== null && remaining === 0
-  const isWarning  = remaining !== null && remaining > 0 && remaining < 5 * 60 * 1000
+  const isWarning  = remaining !== null && remaining > 0 && remaining < 2 * 60 * 1000
 
   const handleCheckin = () => {
     checkin(undefined, {
@@ -65,7 +65,7 @@ export default function CheckinButton({
       {deadline && remaining !== null && !isExpired && (
         <div className={cn(
           "flex items-center gap-2 text-xs font-mono",
-          isWarning ? "text-[#FF4444]" : "text-[#8896A4]",
+          isWarning ? "text-crimson" : "text-muted",
         )}>
           <IconCalendar size={12} className="shrink-0" />
           <span>Check-in encerra em</span>
@@ -73,7 +73,7 @@ export default function CheckinButton({
             {formatCountdown(remaining)}
           </span>
           {isWarning && (
-            <span className="text-[#FF4444] font-semibold">— W.O. iminente!</span>
+            <span className="text-crimson font-semibold">— W.O. iminente!</span>
           )}
         </div>
       )}
@@ -83,8 +83,8 @@ export default function CheckinButton({
         <div className={cn(
           "flex items-center gap-2 px-3 py-2 border text-xs font-mono",
           checkedIn
-            ? "border-[#00D364]/30 bg-[rgba(0,211,100,0.05)] text-[#00D364]"
-            : "border-[#252D3D] text-[#4A5568]",
+            ? "border-success/30 bg-[rgba(22,163,74,0.05)] text-success"
+            : "border-border text-muted",
         )}>
           <span className="text-base leading-none">{checkedIn ? "✓" : "○"}</span>
           <span>Meu time</span>
@@ -92,8 +92,8 @@ export default function CheckinButton({
         <div className={cn(
           "flex items-center gap-2 px-3 py-2 border text-xs font-mono",
           opponentCheckedIn
-            ? "border-[#00D364]/30 bg-[rgba(0,211,100,0.05)] text-[#00D364]"
-            : "border-[#252D3D] text-[#4A5568]",
+            ? "border-success/30 bg-[rgba(22,163,74,0.05)] text-success"
+            : "border-border text-muted",
         )}>
           <span className="text-base leading-none">{opponentCheckedIn ? "✓" : "○"}</span>
           <span>Adversário</span>
@@ -102,15 +102,15 @@ export default function CheckinButton({
 
       {/* Action */}
       {checkedIn ? (
-        <div className="px-4 py-3 border border-[#00D364]/20 bg-[rgba(0,211,100,0.04)] text-center">
-          <p className="text-sm font-mono text-[#00D364]">Check-in realizado</p>
+        <div className="px-4 py-3 border border-success/20 bg-[rgba(22,163,74,0.04)] text-center">
+          <p className="text-sm font-mono text-success">Check-in realizado</p>
           {!opponentCheckedIn && (
-            <p className="text-xs text-[#8896A4] mt-1">Aguardando check-in do adversário…</p>
+            <p className="text-xs text-muted mt-1">Aguardando check-in do adversário…</p>
           )}
         </div>
       ) : isExpired ? (
-        <div className="px-4 py-3 border border-[#FF4444]/20 bg-[rgba(255,68,68,0.05)] text-center">
-          <p className="text-sm font-mono text-[#FF4444]">Tempo de check-in encerrado</p>
+        <div className="px-4 py-3 border border-danger/20 bg-[rgba(220,38,38,0.05)] text-center">
+          <p className="text-sm font-mono text-danger">Tempo de check-in encerrado</p>
         </div>
       ) : (
         <Button

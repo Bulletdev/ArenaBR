@@ -59,12 +59,12 @@ export default function CaptainReportPanel({
 
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-3 px-4 py-3 border border-[#00D364]/30 bg-[rgba(0,211,100,0.05)]">
-          <span className="text-[#00D364] text-lg leading-none">✓</span>
+        <div className="flex items-center gap-3 px-4 py-3 border border-success/30 bg-[rgba(22,163,74,0.05)]">
+          <span className="text-success text-lg leading-none">✓</span>
           <div>
-            <p className="text-sm font-mono text-[#00D364]">Resultado enviado</p>
+            <p className="text-sm font-mono text-success">Resultado enviado</p>
             {reportData?.my_report && (
-              <p className="text-xs text-[#8896A4] mt-0.5">
+              <p className="text-xs text-muted mt-0.5">
                 {reportData.my_report.team_a_score} — {reportData.my_report.team_b_score}
               </p>
             )}
@@ -72,16 +72,16 @@ export default function CaptainReportPanel({
         </div>
 
         {opponentReported ? (
-          <div className="flex items-center gap-3 px-4 py-3 border border-[#0596AA]/30 bg-[rgba(5,150,170,0.05)]">
-            <span className="text-[#0596AA] text-lg leading-none">✓</span>
-            <p className="text-sm font-mono text-[#0596AA]">
+          <div className="flex items-center gap-3 px-4 py-3 border border-success/30 bg-[rgba(22,163,74,0.05)]">
+            <span className="text-success text-lg leading-none">✓</span>
+            <p className="text-sm font-mono text-success">
               Adversário também reportou — aguardando confirmação automática
             </p>
           </div>
         ) : (
-          <div className="flex items-center gap-3 px-4 py-3 border border-[#252D3D]">
-            <span className="text-[#4A5568] text-xs font-mono animate-pulse">○</span>
-            <p className="text-sm font-mono text-[#8896A4]">
+          <div className="flex items-center gap-3 px-4 py-3 border border-border">
+            <span className="text-muted text-xs font-mono animate-pulse">○</span>
+            <p className="text-sm font-mono text-muted">
               Aguardando o adversário confirmar o resultado…
             </p>
           </div>
@@ -93,10 +93,10 @@ export default function CaptainReportPanel({
   return (
     <div className="space-y-5">
       {/* Context */}
-      <div className="flex items-start gap-3 px-4 py-3 border border-[#252D3D] bg-[#0A0E1A]">
-        <IconShield size={13} className="text-[#8896A4] mt-0.5 shrink-0" />
-        <p className="text-xs text-[#8896A4] leading-relaxed">
-          Envie o resultado do <span className="text-[#E8E8E8]">BO{boFormat}</span> com o print da tela de pós-jogo como evidência.
+      <div className="flex items-start gap-3 px-4 py-3 border border-border bg-surface">
+        <IconShield size={13} className="text-muted mt-0.5 shrink-0" />
+        <p className="text-xs text-muted leading-relaxed">
+          Envie o resultado do <span className="text-text">BO{boFormat}</span> com o print da tela de pós-jogo como evidência.
           O adversário receberá o resultado para confirmar. Em caso de divergência, um árbitro resolverá.
         </p>
       </div>
@@ -106,7 +106,7 @@ export default function CaptainReportPanel({
         {/* Team A */}
         <div className="flex flex-col items-center gap-2 flex-1">
           <Avatar name={teamAName ?? "TBD"} size="md" />
-          <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm text-center truncate max-w-full">
+          <span className="font-display font-bold text-text uppercase tracking-wider text-sm text-center truncate max-w-full">
             {teamAName ?? "TBD"}
           </span>
           <input
@@ -115,22 +115,22 @@ export default function CaptainReportPanel({
             max={wins}
             value={scoreA}
             onChange={e => setScoreA(Math.max(0, Math.min(wins, parseInt(e.target.value) || 0)))}
-            className="w-16 text-center font-mono text-2xl font-bold bg-[#0A0E1A] border border-[#252D3D] text-[#E8E8E8] focus:border-[#C89B3C] outline-none py-2"
+            className="w-16 text-center font-mono text-2xl font-bold bg-surface border border-border text-text focus:border-[var(--color-crimson)] outline-none py-2"
           />
         </div>
 
         {/* VS */}
         <div className="flex flex-col items-center gap-1 shrink-0">
-          <span className="font-mono text-xs text-[#4A5568] uppercase tracking-widest">
+          <span className="font-mono text-xs text-muted uppercase tracking-widest">
             BO{boFormat}
           </span>
-          <span className="font-mono text-[#252D3D] text-lg">×</span>
+          <span className="font-mono text-border text-lg">×</span>
         </div>
 
         {/* Team B */}
         <div className="flex flex-col items-center gap-2 flex-1">
           <Avatar name={teamBName ?? "TBD"} size="md" />
-          <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm text-center truncate max-w-full">
+          <span className="font-display font-bold text-text uppercase tracking-wider text-sm text-center truncate max-w-full">
             {teamBName ?? "TBD"}
           </span>
           <input
@@ -139,7 +139,7 @@ export default function CaptainReportPanel({
             max={wins}
             value={scoreB}
             onChange={e => setScoreB(Math.max(0, Math.min(wins, parseInt(e.target.value) || 0)))}
-            className="w-16 text-center font-mono text-2xl font-bold bg-[#0A0E1A] border border-[#252D3D] text-[#E8E8E8] focus:border-[#C89B3C] outline-none py-2"
+            className="w-16 text-center font-mono text-2xl font-bold bg-surface border border-border text-text focus:border-[var(--color-crimson)] outline-none py-2"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function CaptainReportPanel({
       {/* Winner preview */}
       <div className={cn(
         "py-2 text-center text-xs font-mono transition-all",
-        valid ? "text-[#00D364]" : "text-[#4A5568]",
+        valid ? "text-success" : "text-muted",
       )}>
         {valid
           ? <><IconTrophy size={11} className="inline mr-1" />Vencedor: <strong>{winnerName}</strong></>
@@ -157,7 +157,7 @@ export default function CaptainReportPanel({
 
       {/* Evidence URL */}
       <div className="space-y-1.5">
-        <label className="font-mono text-[10px] uppercase tracking-widest text-[#8896A4]">
+        <label className="font-mono text-[10px] uppercase tracking-widest text-muted">
           URL da evidência (print / Imgur / drive)
         </label>
         <Input

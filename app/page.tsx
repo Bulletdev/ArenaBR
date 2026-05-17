@@ -8,7 +8,7 @@ import LandingFooter from "@/components/landing/LandingFooter"
 
 export default function LandingPage() {
   return (
-    <main className="bg-[#0A0E1A] text-[#E8E8E8] overflow-x-hidden">
+    <main className="bg-black text-text overflow-x-hidden">
       <LandingNav />
       <Hero />
       <About />

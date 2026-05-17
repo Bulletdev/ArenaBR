@@ -27,10 +27,10 @@ const STATUS_LABEL: Record<TournamentMatchStatus, string> = {
   walkover:         "W.O.",
 }
 
-const STATUS_VARIANT: Record<TournamentMatchStatus, "muted" | "success" | "teal" | "gold"> = {
+const STATUS_VARIANT: Record<TournamentMatchStatus, "muted" | "success" | "crimson" | "gold"> = {
   scheduled:        "muted",
-  checkin_open:     "teal",
-  in_progress:      "teal",
+  checkin_open:     "crimson",
+  in_progress:      "crimson",
   awaiting_report:  "gold",
   awaiting_confirm: "gold",
   disputed:         "gold",
@@ -43,8 +43,8 @@ const STATUS_VARIANT: Record<TournamentMatchStatus, "muted" | "success" | "teal"
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">{children}</span>
-      <div className="flex-1 h-px bg-[#252D3D]" />
+      <span className="font-mono text-xs uppercase tracking-widest text-muted">{children}</span>
+      <div className="flex-1 h-px bg-border" />
     </div>
   )
 }
@@ -62,7 +62,7 @@ export default function MatchDetailPage() {
   if (isLoading) {
     return (
       <div className="p-6 flex items-center justify-center min-h-[300px]">
-        <p className="font-mono text-xs text-[#4A5568] uppercase tracking-widest animate-pulse">
+        <p className="font-mono text-xs text-muted uppercase tracking-widest animate-pulse">
           Carregando partida…
         </p>
       </div>
@@ -72,7 +72,7 @@ export default function MatchDetailPage() {
   if (error || !match) {
     return (
       <div className="p-6">
-        <p className="text-[#8896A4]">Partida não encontrada.</p>
+        <p className="text-muted">Partida não encontrada.</p>
       </div>
     )
   }
@@ -87,16 +87,16 @@ export default function MatchDetailPage() {
   return (
     <div className="p-6 space-y-6 max-w-2xl mx-auto">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs font-mono text-[#4A5568]">
-        <Link href="/dashboard/campeonatos" className="hover:text-[#8896A4] transition-colors">
+      <nav className="flex items-center gap-2 text-xs font-mono text-muted">
+        <Link href="/dashboard/campeonatos" className="hover:text-muted transition-colors">
           Campeonatos
         </Link>
         <span>›</span>
-        <Link href={`/dashboard/campeonatos/${tournamentId}`} className="hover:text-[#8896A4] transition-colors">
+        <Link href={`/dashboard/campeonatos/${tournamentId}`} className="hover:text-muted transition-colors">
           Torneio
         </Link>
         <span>›</span>
-        <span className="text-[#8896A4]">{match.round_label}</span>
+        <span className="text-muted">{match.round_label}</span>
       </nav>
 
       {/* Match header */}
@@ -104,7 +104,7 @@ export default function MatchDetailPage() {
         <div className="space-y-4">
           {/* Round + status */}
           <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#4A5568]">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
               {match.round_label}
             </span>
             <RetroBadge variant={STATUS_VARIANT[match.status]}>
@@ -120,26 +120,26 @@ export default function MatchDetailPage() {
               match.winner_id && match.winner_id !== match.team_a_id && "opacity-40",
             )}>
               <Avatar name={match.team_a_name ?? "TBD"} size="lg" />
-              <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm text-center">
+              <span className="font-display font-bold text-text uppercase tracking-wider text-sm text-center">
                 {match.team_a_name ?? "TBD"}
               </span>
               {match.winner_id === match.team_a_id && (
-                <span className="font-mono text-[10px] text-[#C89B3C] uppercase tracking-widest">vencedor</span>
+                <span className="font-mono text-[10px] text-gold uppercase tracking-widest">vencedor</span>
               )}
             </div>
 
             {/* Score */}
             <div className="flex flex-col items-center gap-1 shrink-0">
               <div className="flex items-center gap-3 font-mono text-3xl font-bold">
-                <span className={match.winner_id === match.team_a_id ? "text-[#00D364]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]"}>
+                <span className={match.winner_id === match.team_a_id ? "text-success" : isCompleted ? "text-muted" : "text-text"}>
                   {match.team_a_score}
                 </span>
-                <span className="text-[#252D3D] text-lg">:</span>
-                <span className={match.winner_id === match.team_b_id ? "text-[#00D364]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]"}>
+                <span className="text-border text-lg">:</span>
+                <span className={match.winner_id === match.team_b_id ? "text-success" : isCompleted ? "text-muted" : "text-text"}>
                   {match.team_b_score}
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-[#4A5568] uppercase">BO{match.bo_format}</span>
+              <span className="font-mono text-[10px] text-muted uppercase">BO{match.bo_format}</span>
             </div>
 
             {/* Team B */}
@@ -148,11 +148,11 @@ export default function MatchDetailPage() {
               match.winner_id && match.winner_id !== match.team_b_id && "opacity-40",
             )}>
               <Avatar name={match.team_b_name ?? "TBD"} size="lg" />
-              <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm text-center">
+              <span className="font-display font-bold text-text uppercase tracking-wider text-sm text-center">
                 {match.team_b_name ?? "TBD"}
               </span>
               {match.winner_id === match.team_b_id && (
-                <span className="font-mono text-[10px] text-[#C89B3C] uppercase tracking-widest">vencedor</span>
+                <span className="font-mono text-[10px] text-gold uppercase tracking-widest">vencedor</span>
               )}
             </div>
           </div>
@@ -198,10 +198,10 @@ export default function MatchDetailPage() {
           <SectionHeading>Resultado em disputa</SectionHeading>
           <RetroPanel>
             <div className="flex items-start gap-3">
-              <IconShield size={14} className="text-[#C89B3C] mt-0.5 shrink-0" />
+              <IconShield size={14} className="text-gold mt-0.5 shrink-0" />
               <div className="space-y-1">
-                <p className="text-sm text-[#E8E8E8]">Resultados divergentes reportados</p>
-                <p className="text-xs text-[#8896A4] leading-relaxed">
+                <p className="text-sm text-text">Resultados divergentes reportados</p>
+                <p className="text-xs text-muted leading-relaxed">
                   Os dois times enviaram placares diferentes. Um árbitro da ArenaBR irá analisar as evidências e resolver a disputa.
                 </p>
               </div>
@@ -216,9 +216,9 @@ export default function MatchDetailPage() {
           <SectionHeading>W.O.</SectionHeading>
           <RetroPanel>
             <div className="flex items-start gap-3">
-              <span className="text-[#FF4444] text-lg leading-none mt-0.5">!</span>
+              <span className="text-danger text-lg leading-none mt-0.5">!</span>
               <div className="space-y-1">
-                <p className="text-sm text-[#E8E8E8]">
+                <p className="text-sm text-text">
                   {match.winner_id === match.team_a_id
                     ? `${match.team_a_name} venceu por W.O.`
                     : match.winner_id === match.team_b_id
@@ -226,7 +226,7 @@ export default function MatchDetailPage() {
                     : "Partida encerrada por W.O."}
                 </p>
                 {match.wo_deadline_at && (
-                  <p className="text-xs text-[#8896A4]">
+                  <p className="text-xs text-muted">
                     Time ausente no check-in até o prazo.
                   </p>
                 )}
@@ -238,7 +238,7 @@ export default function MatchDetailPage() {
 
       {/* Not participant — info only hint */}
       {!isAuthenticated && !isCompleted && (
-        <p className="text-center text-xs font-mono text-[#4A5568]">
+        <p className="text-center text-xs font-mono text-muted">
           Faça login como capitão para participar desta partida.
         </p>
       )}

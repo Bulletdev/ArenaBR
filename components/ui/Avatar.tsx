@@ -20,7 +20,7 @@ export default function Avatar({ name, src, size = "md", className }: AvatarProp
       <img
         src={src}
         alt={name}
-        className={cn("rounded-none object-cover border border-[#252D3D]", sizeClass[size], className)}
+        className={cn("rounded-none object-cover border border-[var(--color-surface)]", sizeClass[size], className)}
       />
     )
   }
@@ -28,8 +28,8 @@ export default function Avatar({ name, src, size = "md", className }: AvatarProp
   return (
     <div
       className={cn(
-        "flex items-center justify-center font-mono font-bold border border-[#252D3D]",
-        "bg-[#1A2235] text-[#C89B3C]",
+        "flex items-center justify-center font-mono font-bold border border-[var(--color-surface)]",
+        "bg-[var(--color-elevated)] text-[var(--color-gold)]",
         sizeClass[size],
         className
       )}

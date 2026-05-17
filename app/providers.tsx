@@ -25,9 +25,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         theme="dark"
         toastOptions={{
           style: {
-            background: "#0F1823",
-            border: "1px solid #252D3D",
-            color: "#E8E8E8",
+            background: "var(--color-surface)",
+            border: "1px solid var(--color-border)",
+            color: "var(--color-text)",
             fontFamily: "'Exo 2', sans-serif",
           },
         }}

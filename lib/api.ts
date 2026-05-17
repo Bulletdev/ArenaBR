@@ -131,6 +131,11 @@ export const tournamentApi = {
       method: "PATCH",
     }),
 
+  withdrawTeam: (tournamentId: string, teamId: string) =>
+    request<ApiSuccess<{ message: string }>>(`/api/tournaments/${tournamentId}/teams/${teamId}`, {
+      method: "DELETE",
+    }),
+
   // ─── Matches ────────────────────────────────────────────────
   getMatches: (tournamentId: string) =>
     request<ApiSuccess<TournamentMatch[]>>(`/api/tournaments/${tournamentId}/matches`),

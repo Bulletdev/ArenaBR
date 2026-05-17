@@ -1,27 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Fonts ─────────────────────────────────────────────────── */
-@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
-
 /* ─── CSS Variables ──────────────────────────────────────────── */
 :root {
-  --color-navy:       #0A0E1A;
-  --color-card:       #0F1823;
-  --color-muted:      #1A2235;
-  --color-border:     #252D3D;
-  --color-gold:       #C89B3C;
-  --color-gold-dim:   #8A6A28;
-  --color-teal:       #0596AA;
-  --color-teal-dim:   #047A8A;
-  --color-success:    #00D364;
-  --color-danger:     #FF4444;
-  --color-text:       #E8E8E8;
-  --color-text-muted: #8896A4;
-
-  --shadow-gold: 0 0 12px rgba(200, 155, 60, 0.35);
-  --shadow-teal: 0 0 12px rgba(5, 150, 170, 0.35);
+  --color-black:        #09090B;
+  --color-surface:      #111113;
+  --color-elevated:     #18181B;
+  --color-border:       #27272A;
+  --color-crimson:      #B91C1C;
+  --color-crimson-dim:  #991B1B;
+  --color-gold:         #C89B3C;
+  --color-gold-dim:     #8A6A28;
+  --color-text:         #F4F4F5;
+  --color-text-muted:   #A1A1AA;
+  --color-success:      #16A34A;
+  --color-danger:       #DC2626;
+  --shadow-gold:    0 0 12px rgba(200, 155, 60, 0.30);
+  --shadow-crimson: 0 0 16px rgba(185, 28, 28, 0.30);
 }
 
 /* ─── Base ───────────────────────────────────────────────────── */
@@ -31,46 +29,46 @@
   html { color-scheme: dark; scroll-behavior: smooth; }
 
   body {
-    background-color: var(--color-navy);
+    background-color: var(--color-black);
     color: var(--color-text);
-    font-family: "Exo 2", sans-serif;
+    font-family: "Inter", sans-serif;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--color-card); }
+  ::-webkit-scrollbar-track { background: var(--color-surface); }
   ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 0; }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-gold-dim); }
 }
 
-/* ─── Retro UI Components ─────────────────────────────────────── */
+/* ─── UI Components ───────────────────────────────────────────── */
 @layer components {
 
   /* Panel */
-  .retro-panel {
-    background: var(--color-card);
+  .panel {
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     position: relative;
   }
 
-  .retro-panel-gold {
-    background: var(--color-card);
+  .panel-gold {
+    background: var(--color-surface);
     border: 1px solid var(--color-gold-dim);
     box-shadow: var(--shadow-gold);
     position: relative;
   }
 
-  .retro-panel-teal {
-    background: var(--color-card);
-    border: 1px solid var(--color-teal-dim);
-    box-shadow: var(--shadow-teal);
+  .panel-crimson {
+    background: var(--color-surface);
+    border: 1px solid var(--color-crimson-dim);
+    box-shadow: var(--shadow-crimson);
     position: relative;
   }
 
-  /* Cantos decorativos HUD */
-  .hud-corners::before,
-  .hud-corners::after {
+  /* Cantos decorativos bracket */
+  .bracket-corners::before,
+  .bracket-corners::after {
     content: "";
     position: absolute;
     width: 10px;
@@ -78,16 +76,15 @@
     border-color: var(--color-gold);
     border-style: solid;
   }
-  .hud-corners::before {
+  .bracket-corners::before {
     top: -1px; left: -1px;
     border-width: 2px 0 0 2px;
   }
-  .hud-corners::after {
+  .bracket-corners::after {
     bottom: -1px; right: -1px;
     border-width: 0 2px 2px 0;
   }
-
-  /* Scanlines */
+  /* opt-in only — nao aplicar globalmente */
   .scanlines {
     position: relative;
     overflow: hidden;
@@ -116,27 +113,27 @@
   }
 
   /* Badge */
-  .retro-badge {
+  .badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 2px 8px;
-    font-family: "Share Tech Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     border: 1px solid currentColor;
   }
 
-  /* Separador retro */
-  .retro-sep {
+  /* Separador */
+  .sep {
     height: 1px;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--color-gold-dim) 20%,
-      var(--color-gold) 50%,
-      var(--color-gold-dim) 80%,
+      var(--color-crimson-dim) 20%,
+      var(--color-crimson) 50%,
+      var(--color-crimson-dim) 80%,
       transparent 100%
     );
     border: none;
@@ -144,12 +141,12 @@
 
   /* Stat box */
   .retro-stat {
-    background: var(--color-muted);
+    background: var(--color-elevated);
     border: 1px solid var(--color-border);
     padding: 12px 16px;
   }
   .retro-stat-value {
-    font-family: "Share Tech Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 1.5rem;
     color: var(--color-gold);
   }
@@ -166,7 +163,7 @@
     border-collapse: collapse;
   }
   .retro-table th {
-    font-family: "Share Tech Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -177,21 +174,21 @@
   }
   .retro-table td {
     padding: 12px;
-    border-bottom: 1px solid rgba(37, 45, 61, 0.5);
+    border-bottom: 1px solid rgba(39, 39, 42, 0.5);
     font-size: 14px;
   }
   .retro-table tr:hover td {
-    background: var(--color-muted);
+    background: var(--color-elevated);
   }
 
   /* Input */
   .retro-input {
     width: 100%;
-    background: var(--color-muted);
+    background: var(--color-elevated);
     border: 1px solid var(--color-border);
     color: var(--color-text);
     padding: 10px 14px;
-    font-family: "Exo 2", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
@@ -204,13 +201,13 @@
   }
   .retro-input::placeholder { color: var(--color-text-muted); }
   .retro-input:focus {
-    border-color: var(--color-gold-dim);
-    box-shadow: 0 0 0 2px rgba(200, 155, 60, 0.15);
+    border-color: var(--color-crimson-dim);
+    box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
   }
 
   /* Label */
   .retro-label {
-    font-family: "Share Tech Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -225,12 +222,12 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--color-gold);
-    color: #0A0E1A;
-    font-family: "Rajdhani", sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.05em;
+    background: var(--color-crimson);
+    color: var(--color-text);
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 10px 24px;
     border: none;
@@ -238,8 +235,8 @@
     transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
   }
   .btn-primary:hover {
-    background: #D4A84A;
-    box-shadow: var(--shadow-gold);
+    background: var(--color-crimson-dim);
+    box-shadow: var(--shadow-crimson);
   }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled {
@@ -254,21 +251,21 @@
     justify-content: center;
     gap: 8px;
     background: transparent;
-    color: var(--color-gold);
-    font-family: "Rajdhani", sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: 0.05em;
+    color: var(--color-crimson);
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 9px 24px;
-    border: 1px solid var(--color-gold-dim);
+    border: 1px solid var(--color-crimson-dim);
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
   }
   .btn-secondary:hover {
-    background: rgba(200, 155, 60, 0.08);
-    border-color: var(--color-gold);
-    box-shadow: var(--shadow-gold);
+    background: rgba(185, 28, 28, 0.08);
+    border-color: var(--color-crimson);
+    box-shadow: var(--shadow-crimson);
   }
 
   .btn-ghost {
@@ -278,7 +275,7 @@
     gap: 8px;
     background: transparent;
     color: var(--color-text-muted);
-    font-family: "Exo 2", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     padding: 8px 16px;
     border: 1px solid var(--color-border);
@@ -297,14 +294,14 @@
     gap: 8px;
     background: transparent;
     color: var(--color-danger);
-    font-family: "Exo 2", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     padding: 8px 16px;
-    border: 1px solid rgba(255, 68, 68, 0.4);
+    border: 1px solid rgba(220, 38, 38, 0.4);
     cursor: pointer;
     transition: background 0.15s;
   }
-  .btn-danger:hover { background: rgba(255, 68, 68, 0.08); }
+  .btn-danger:hover { background: rgba(220, 38, 38, 0.08); }
 
   /* Hover lift — cards interativos */
   .hover-lift {
@@ -316,13 +313,13 @@
   .hover-lift-gold:hover {
     box-shadow: 0 8px 32px rgba(200, 155, 60, 0.2);
   }
-  .hover-lift-teal:hover {
-    box-shadow: 0 8px 32px rgba(5, 150, 170, 0.2);
+  .hover-lift-crimson:hover {
+    box-shadow: 0 8px 32px rgba(185, 28, 28, 0.2);
   }
 
   /* Stat strip */
   .stat-strip {
-    background: linear-gradient(90deg, rgba(200,155,60,0.04) 0%, rgba(5,150,170,0.04) 100%);
+    background: linear-gradient(90deg, rgba(200, 155, 60, 0.04) 0%, rgba(185, 28, 28, 0.04) 100%);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
   }
@@ -360,8 +357,14 @@
     background: rgba(255, 255, 255, 0.03);
   }
   .nav-link.active {
-    color: var(--color-gold);
-    border-left-color: var(--color-gold);
-    background: rgba(200, 155, 60, 0.06);
+    color: var(--color-crimson);
+    border-left-color: var(--color-crimson);
+    background: rgba(185, 28, 28, 0.06);
   }
+}
+
+/* Fora do @layer — maior prioridade que qualquer regra layered */
+.panel-crimson.bracket-corners::before,
+.panel-crimson.bracket-corners::after {
+  border-color: var(--color-crimson);
 }

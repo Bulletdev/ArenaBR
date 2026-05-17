@@ -7,12 +7,13 @@ import RetroPanel from "@/components/ui/RetroPanel"
 import RetroBadge from "@/components/ui/RetroBadge"
 import Avatar from "@/components/ui/Avatar"
 import Button from "@/components/ui/Button"
+import { SkeletonTable } from "@/components/ui/Skeleton"
 import { playerApi } from "@/lib/api"
 import { mockFreeAgents } from "@/lib/mock"
 import { getEloColor, getRoleLabel, eloWeight } from "@/lib/utils"
 import type { Player } from "@/types"
 
-const TIERS = ["Todos", "DIAMOND", "PLATINUM", "GOLD", "SILVER", "BRONZE"]
+const TIERS = ["Todos", "CHALLENGER", "GRANDMASTER", "MASTER", "DIAMOND", "PLATINUM", "GOLD", "SILVER", "BRONZE"]
 const ROLES = ["Todos", "top", "jungle", "mid", "adc", "support"]
 
 export default function JogadoresPage() {
@@ -21,7 +22,7 @@ export default function JogadoresPage() {
   const [roleFilter, setRoleFilter] = useState("Todos")
 
   // Tenta carregar free agents do prostaff; fallback para mock
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["free-agents"],
     queryFn: () => playerApi.freeAgents(),
     retry: false,
@@ -53,7 +54,7 @@ export default function JogadoresPage() {
     <div className="p-6 space-y-6">
       <div>
         <p className="retro-label">ArenaBR Season 1</p>
-        <h1 className="font-display text-3xl font-bold text-[#E8E8E8] uppercase tracking-wider">
+        <h1 className="font-display text-3xl font-bold text-text uppercase tracking-wider">
           Free Agents
         </h1>
       </div>
@@ -67,7 +68,7 @@ export default function JogadoresPage() {
           <div className="flex-1 min-w-48 space-y-1.5">
             <label className="retro-label">Buscar</label>
             <div className="relative">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8896A4]" />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 className="retro-input pl-8"
                 placeholder="Summoner name ou Discord..."
@@ -85,13 +86,16 @@ export default function JogadoresPage() {
                 <button
                   key={tier}
                   onClick={() => setTierFilter(tier)}
-                  className={`retro-badge cursor-pointer transition-colors ${
+                  className={`badge cursor-pointer transition-colors ${
                     tierFilter === tier
-                      ? "border-[#C89B3C] text-[#C89B3C]"
-                      : "border-[#252D3D] text-[#8896A4] hover:border-[#8896A4]"
+                      ? "border-crimson text-crimson"
+                      : "border-border text-muted hover:border-muted"
                   }`}
                 >
                   {tier === "Todos" ? "Todos" :
+                   tier === "CHALLENGER" ? "Desafiante" :
+                   tier === "GRANDMASTER" ? "Grão-Mestre" :
+                   tier === "MASTER" ? "Mestre" :
                    tier === "DIAMOND" ? "Diamante" :
                    tier === "PLATINUM" ? "Platina" :
                    tier === "GOLD" ? "Ouro" :
@@ -109,10 +113,10 @@ export default function JogadoresPage() {
                 <button
                   key={role}
                   onClick={() => setRoleFilter(role)}
-                  className={`retro-badge cursor-pointer transition-colors ${
+                  className={`badge cursor-pointer transition-colors ${
                     roleFilter === role
-                      ? "border-[#0596AA] text-[#0596AA]"
-                      : "border-[#252D3D] text-[#8896A4] hover:border-[#8896A4]"
+                      ? "border-crimson text-crimson"
+                      : "border-border text-muted hover:border-muted"
                   }`}
                 >
                   {role === "Todos" ? "Todos" : getRoleLabel(role)}
@@ -125,11 +129,15 @@ export default function JogadoresPage() {
 
       {/* Table */}
       <RetroPanel padding={false}>
-        <div className="px-5 py-3 border-b border-[#252D3D]">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+        <div className="px-5 py-3 border-b border-border">
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">
             {filtered.length} free agent{filtered.length !== 1 ? "s" : ""} disponíveis
           </span>
         </div>
+
+        {isLoading ? (
+          <SkeletonTable rows={8} cols={5} />
+        ) : null}
 
         <table className="retro-table">
           <thead>
@@ -148,7 +156,7 @@ export default function JogadoresPage() {
                 <td>
                   <div className="flex items-center gap-2">
                     <Avatar name={player.summoner_name} src={player.avatar_url ?? undefined} size="sm" />
-                    <span className="font-mono text-sm text-[#E8E8E8]">{player.summoner_name}</span>
+                    <span className="font-mono text-sm text-text">{player.summoner_name}</span>
                   </div>
                 </td>
                 <td className="text-center">
@@ -161,10 +169,10 @@ export default function JogadoresPage() {
                     {player.current_rank ?? "Unranked"}
                   </span>
                 </td>
-                <td className="font-mono text-xs text-[#8896A4]">
+                <td className="font-mono text-xs text-muted">
                   {player.win_rate != null ? `${player.win_rate}%` : "—"}
                 </td>
-                <td className="text-sm text-[#8896A4] font-mono">
+                <td className="text-sm text-muted font-mono">
                   {player.discord_user_id ?? "—"}
                 </td>
                 <td>
@@ -188,7 +196,7 @@ export default function JogadoresPage() {
         </table>
 
         {filtered.length === 0 && (
-          <div className="py-12 text-center text-[#8896A4] text-sm">
+          <div className="py-12 text-center text-muted text-sm">
             Nenhum free agent com os filtros aplicados.
           </div>
         )}

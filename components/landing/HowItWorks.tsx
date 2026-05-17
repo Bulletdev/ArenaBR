@@ -14,7 +14,7 @@ const steps = [
     num: "02",
     icon: IconTrophy,
     title: "Escolha um campeonato",
-    description: "Acesse os campeonatos disponíveis, veja premiação, formato e times inscritos antes de decidir.",
+    description: "Acesse os campeonatos disponiveis, veja premiacao, formato e times inscritos antes de decidir.",
   },
   {
     num: "03",
@@ -26,7 +26,7 @@ const steps = [
     num: "04",
     icon: IconBarChart,
     title: "Jogue e acompanhe",
-    description: "Acompanhe a classificação em tempo real, veja o elenco dos times e os stats dos jogadores.",
+    description: "Acompanhe a classificacao em tempo real, veja o elenco dos times e os stats dos jogadores.",
   },
 ]
 
@@ -35,12 +35,12 @@ export default function HowItWorks() {
     <section id="como-funciona" className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
-          <span className="retro-badge border-[#C89B3C] text-[#C89B3C] mb-4 inline-flex">Como funciona</span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-wider">
-            Do cadastro à arena
+          <span className="badge border-crimson text-crimson mb-4 inline-flex">Como funciona</span>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-text uppercase tracking-wider">
+            Do cadastro a arena
           </h2>
-          <p className="mt-3 text-[#8896A4] max-w-xl mx-auto">
-            Em 4 passos simples você está dentro do campeonato e competindo pelos prêmios.
+          <p className="mt-3 text-muted max-w-xl mx-auto">
+            Em 4 passos simples voce esta dentro do campeonato e competindo pelos premios.
           </p>
         </div>
 
@@ -52,20 +52,20 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="retro-panel hud-corners hover-lift hover-lift-gold p-5 space-y-3 relative"
+              className="panel-crimson bracket-corners hover-lift p-5 space-y-3 relative"
             >
               <div className="flex items-start justify-between">
-                <span className="font-mono text-3xl font-bold text-[#252D3D]">{step.num}</span>
-                <step.icon size={18} className="text-[#C89B3C]" />
+                <span className="font-mono text-3xl font-bold text-border">{step.num}</span>
+                <step.icon size={18} className="text-crimson" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm">
+                <h3 className="font-display font-bold text-text uppercase tracking-wider text-sm">
                   {step.title}
                 </h3>
-                <p className="text-xs text-[#8896A4] mt-1.5 leading-relaxed">{step.description}</p>
+                <p className="text-xs text-muted mt-1.5 leading-relaxed">{step.description}</p>
               </div>
               {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute -right-2 top-1/2 w-4 h-px bg-[#252D3D] z-10" />
+                <div className="hidden lg:block absolute -right-2 top-1/2 w-4 h-px bg-border z-10" />
               )}
             </motion.div>
           ))}

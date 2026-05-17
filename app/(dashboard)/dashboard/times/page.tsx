@@ -27,7 +27,7 @@ export default function TimesPage() {
       <div className="flex items-start justify-between">
         <div>
           <p className="retro-label">ArenaBR</p>
-          <h1 className="font-display text-3xl font-bold text-[#E8E8E8] uppercase tracking-wider">
+          <h1 className="font-display text-3xl font-bold text-text uppercase tracking-wider">
             Times
           </h1>
         </div>
@@ -44,12 +44,12 @@ export default function TimesPage() {
       {/* Meu elenco */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
-          <Crown size={14} className="text-[#C89B3C]" />
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+          <Crown size={14} className="text-gold" />
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">
             Meu elenco
           </span>
           {!isLoading && (
-            <span className="text-xs text-[#8896A4] font-mono">
+            <span className="text-xs text-muted font-mono">
               — {myPlayers.length} jogadores
             </span>
           )}
@@ -57,13 +57,13 @@ export default function TimesPage() {
 
         {isLoading ? (
           <RetroPanel>
-            <p className="text-sm text-[#8896A4] text-center py-4 animate-pulse">
+            <p className="text-sm text-muted text-center py-4 animate-pulse">
               Carregando elenco…
             </p>
           </RetroPanel>
         ) : myPlayers.length === 0 ? (
           <RetroPanel>
-            <p className="text-sm text-[#4A5568] font-mono text-center py-8">
+            <p className="text-sm text-muted font-mono text-center py-8">
               Nenhum jogador no elenco.
             </p>
           </RetroPanel>
@@ -90,11 +90,11 @@ export default function TimesPage() {
                           size="sm"
                         />
                         <div>
-                          <p className="font-mono text-sm text-[#E8E8E8]">
+                          <p className="font-mono text-sm text-text">
                             {player.professional_name ?? player.summoner_name}
                           </p>
                           {player.professional_name && (
-                            <p className="text-xs text-[#8896A4] font-mono">
+                            <p className="text-xs text-muted font-mono">
                               {player.summoner_name}
                             </p>
                           )}
@@ -114,7 +114,7 @@ export default function TimesPage() {
                         {player.current_rank ?? "Unranked"}
                       </span>
                     </td>
-                    <td className="font-mono text-xs text-[#8896A4]">
+                    <td className="font-mono text-xs text-muted">
                       {player.win_rate != null ? `${player.win_rate}%` : "—"}
                     </td>
                     <td>

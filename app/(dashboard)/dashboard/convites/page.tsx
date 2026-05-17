@@ -19,7 +19,7 @@ export default function ConvitesPage() {
     <div className="p-6 space-y-6">
       <div>
         <p className="retro-label">Notificações</p>
-        <h1 className="font-display text-3xl font-bold text-[#E8E8E8] uppercase tracking-wider">
+        <h1 className="font-display text-3xl font-bold text-text uppercase tracking-wider">
           Convites
         </h1>
       </div>
@@ -29,8 +29,8 @@ export default function ConvitesPage() {
       {/* Pendentes */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
-          <Mail size={14} className="text-[#C89B3C]" />
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+          <Mail size={14} className="text-crimson" />
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">
             Pendentes
           </span>
           {pending.length > 0 && (
@@ -40,7 +40,7 @@ export default function ConvitesPage() {
 
         {pending.length === 0 ? (
           <RetroPanel>
-            <p className="text-[#8896A4] text-sm text-center py-6">
+            <p className="text-muted text-sm text-center py-6">
               Nenhum convite pendente.
             </p>
           </RetroPanel>
@@ -54,7 +54,7 @@ export default function ConvitesPage() {
       {/* Respondidos */}
       {resolved.length > 0 && (
         <section className="space-y-3">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">
             Respondidos
           </span>
           {resolved.map((invite) => (
@@ -75,14 +75,14 @@ function InviteCard({
 }) {
   return (
     <RetroPanel
-      variant={invite.status === "accepted" ? "teal" : "default"}
+      variant={invite.status === "accepted" ? "crimson" : "default"}
       className="flex items-start gap-4 flex-wrap"
     >
       <Avatar name={invite.team_name} size="md" />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider">
+          <span className="font-display font-bold text-text uppercase tracking-wider">
             {invite.team_name}
           </span>
           <RetroBadge
@@ -98,14 +98,14 @@ function InviteCard({
           </RetroBadge>
         </div>
 
-        <div className="text-xs text-[#8896A4] mt-1 space-y-0.5">
+        <div className="text-xs text-muted mt-1 space-y-0.5">
           <div className="flex items-center gap-1">
-            <Trophy size={11} className="text-[#C89B3C]" />
+            <Trophy size={11} className="text-gold" />
             <span>{invite.championship_name}</span>
           </div>
           <div>
             Capitão:{" "}
-            <span className="font-mono text-[#E8E8E8]">{invite.captain_summoner_name}</span>
+            <span className="font-mono text-text">{invite.captain_summoner_name}</span>
           </div>
           <div>{formatDate(invite.created_at)}</div>
         </div>
@@ -115,7 +115,7 @@ function InviteCard({
         <div className="flex gap-2 mt-1">
           <Button
             variant="secondary"
-            className="text-xs py-1.5 px-3 text-[#00D364] border-[#00D364] hover:bg-[rgba(0,211,100,0.08)]"
+            className="text-xs py-1.5 px-3 text-success border-success hover:bg-[rgba(22,163,74,0.08)]"
             onClick={() => onRespond(invite.id, "accepted")}
           >
             <Check size={12} />

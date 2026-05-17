@@ -3,22 +3,21 @@ import Link from "next/link"
 export default function LandingFooter() {
   return (
     <footer className="relative z-10 mt-auto">
-      {/* Linha gradiente topo */}
-      <div className="h-px bg-gradient-to-r from-transparent via-[#C89B3C]/40 to-transparent" />
+      {/* Linha gradiente topo — crimson */}
+      <div className="h-px bg-gradient-to-r from-transparent via-crimson/40 to-transparent" />
 
       <div
-        className="px-7 py-8"
-        style={{ background: "linear-gradient(to bottom, rgba(12,34,63,0.6), #070C14)" }}
+        className="px-7 py-8 bg-black"
       >
         <div className="mx-auto max-w-6xl">
           {/* Divisor */}
-          <div className="h-px bg-gradient-to-r from-transparent via-[#C89B3C]/20 to-transparent mb-4" />
+          <div className="h-px bg-gradient-to-r from-transparent via-crimson/20 to-transparent mb-4" />
 
           {/* Barra inferior */}
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Esquerda: diamante + copyright */}
             <div className="flex items-center gap-3">
-              <div className="h-1.5 w-1.5 rotate-45 bg-[#C89B3C]/40" />
+              <div className="h-1.5 w-1.5 rotate-45 bg-crimson/40" />
               <span className="font-mono text-[13px] tracking-[2px] text-white/20">
                 &copy; {new Date().getFullYear()} ArenaBR
               </span>
@@ -42,16 +41,16 @@ export default function LandingFooter() {
 
             {/* Direita: aviso + diamante */}
             <div className="flex items-center gap-3">
-              <span className="font-mono text-[13px] tracking-[2px] text-[#C89B3C]/30">
+              <span className="font-mono text-[13px] tracking-[2px] text-white/20">
                 BR · Season 1
               </span>
-              <div className="h-1.5 w-1.5 rotate-45 bg-[#C89B3C]/40" />
+              <div className="h-1.5 w-1.5 rotate-45 bg-white/20" />
             </div>
           </div>
 
-          {/* Isenção Riot */}
+          {/* Isencao Riot */}
           <p className="mt-4 text-center font-mono text-[10px] text-white/15">
-            ArenaBR não é afiliada à Riot Games e não reflete as opiniões da Riot Games.
+            ArenaBR nao e afiliada a Riot Games e nao reflete as opinioes da Riot Games.
           </p>
         </div>
       </div>

@@ -9,11 +9,11 @@ import Avatar from "@/components/ui/Avatar"
 import { IconTrophy, IconCalendar, IconRoster, IconDollarSign, IconBarChart, IconShield } from "@/components/ui/NavIcons"
 import MatchCard from "@/components/championship/MatchCard"
 import AdminMatchPanel from "@/components/championship/AdminMatchPanel"
-import { useTournament, useTournamentMatches } from "@/hooks/useTournament"
+import { useTournament, useTournamentMatches, useTournamentTeams, useWithdrawTeam } from "@/hooks/useTournament"
 import { useTournamentChannel } from "@/hooks/useTournamentChannel"
 import { useAuthStore } from "@/stores/auth"
 import { formatCurrency, formatDate } from "@/lib/utils"
-import type { TournamentStatus, TournamentMatch, BracketSide } from "@/types"
+import type { TournamentStatus, TournamentMatch, BracketSide, TournamentTeam } from "@/types"
 
 // ─── Types ────────────────────────────────────────────────────
 type Tab = "partidas" | "chaveamento" | "classificacao" | "stats" | "admin"
@@ -27,11 +27,11 @@ const STATUS_LABEL: Record<TournamentStatus, string> = {
   cancelled:         "Cancelado",
 }
 
-const STATUS_VARIANT: Record<TournamentStatus, "success" | "teal" | "muted" | "gold"> = {
+const STATUS_VARIANT: Record<TournamentStatus, "success" | "crimson" | "muted" | "gold"> = {
   draft:             "muted",
   registration_open: "success",
   seeding:           "gold",
-  in_progress:       "teal",
+  in_progress:       "crimson",
   finished:          "muted",
   cancelled:         "muted",
 }
@@ -44,10 +44,10 @@ const BRACKET_LABEL: Record<BracketSide, string> = {
 
 // ─── KDA color ────────────────────────────────────────────────
 function kdaColor(kda: number): string {
-  if (kda >= 5) return "#C89B3C"
-  if (kda >= 3) return "#0596AA"
-  if (kda < 1)  return "#FF4444"
-  return "#8896A4"
+  if (kda >= 5) return "var(--color-gold)"
+  if (kda >= 3) return "var(--color-crimson)"
+  if (kda < 1)  return "var(--color-danger)"
+  return "var(--color-text-muted)"
 }
 
 // ─── Partidas tab ─────────────────────────────────────────────
@@ -83,7 +83,7 @@ function PartidasTab({ matches, tournamentId }: { matches: TournamentMatch[]; to
 
   if (!matches.length) {
     return (
-      <p className="text-sm text-[#4A5568] font-mono text-center py-12">
+      <p className="text-sm text-muted font-mono text-center py-12">
         O bracket ainda não foi gerado.
       </p>
     )
@@ -94,13 +94,13 @@ function PartidasTab({ matches, tournamentId }: { matches: TournamentMatch[]; to
       {groups.map(({ side, label, rounds }) => (
         <section key={side} className="space-y-4">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">{label}</span>
-            <div className="flex-1 h-px bg-[#252D3D]" />
+            <span className="font-mono text-xs uppercase tracking-widest text-muted">{label}</span>
+            <div className="flex-1 h-px bg-border" />
           </div>
 
           {rounds.map(({ roundLabel, roundOrder, matches: roundMatches }) => (
             <div key={roundOrder} className="space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-[#4A5568] pl-1">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-muted pl-1">
                 {roundLabel}
               </p>
               {roundMatches.map(match => (
@@ -156,7 +156,7 @@ function ClassificacaoTab({ matches }: { matches: TournamentMatch[] }) {
 
   if (!displayRows.length) {
     return (
-      <p className="text-sm text-[#4A5568] font-mono text-center py-12">
+      <p className="text-sm text-muted font-mono text-center py-12">
         Nenhuma partida concluída ainda.
       </p>
     )
@@ -176,12 +176,12 @@ function ClassificacaoTab({ matches }: { matches: TournamentMatch[] }) {
         </thead>
         <tbody>
           {displayRows.map((row, i) => (
-            <tr key={row.team_id} className={i === 0 ? "bg-[#C89B3C]/5" : ""}>
+            <tr key={row.team_id} className={i === 0 ? "bg-gold/5" : ""}>
               <td>
                 <span className={cn("font-mono text-sm font-bold",
-                  row.position === 1 ? "text-[#C89B3C]" :
-                  row.position === 2 ? "text-[#8896A4]" :
-                  row.position === 3 ? "text-[#9B6B4A]" : "text-[#4A5568]"
+                  row.position === 1 ? "text-gold" :
+                  row.position === 2 ? "text-muted" :
+                  row.position === 3 ? "text-[#9B6B4A]" : "text-muted"
                 )}>
                   {row.position}
                 </span>
@@ -189,14 +189,14 @@ function ClassificacaoTab({ matches }: { matches: TournamentMatch[] }) {
               <td>
                 <div className="flex items-center gap-2">
                   <Avatar name={row.team_name} size="sm" />
-                  <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm">
+                  <span className="font-display font-bold text-text uppercase tracking-wider text-sm">
                     {row.team_name}
                   </span>
                 </div>
               </td>
-              <td className="text-center font-mono text-[#00D364] font-bold">{row.wins}</td>
-              <td className="text-center font-mono text-[#FF4444] font-bold">{row.losses}</td>
-              <td className="text-center font-mono text-xs text-[#8896A4]">
+              <td className="text-center font-mono text-success font-bold">{row.wins}</td>
+              <td className="text-center font-mono text-danger font-bold">{row.losses}</td>
+              <td className="text-center font-mono text-xs text-muted">
                 {row.games_won - row.games_lost > 0
                   ? `+${row.games_won - row.games_lost}`
                   : String(row.games_won - row.games_lost)
@@ -236,16 +236,16 @@ function StatsTab() {
     <div className="space-y-8">
       <section className="space-y-3">
         <div className="flex items-center gap-2">
-          <IconBarChart size={14} className="text-[#C89B3C]" />
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">Leaderboard de jogadores</span>
-          <span className="text-[10px] text-[#4A5568] font-mono">(médias por game)</span>
+          <IconBarChart size={14} className="text-gold" />
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">Leaderboard de jogadores</span>
+          <span className="text-[10px] text-muted font-mono">(médias por game)</span>
         </div>
 
         <RetroPanel padding={false}>
           <div className="overflow-x-auto">
             <table className="w-full font-mono text-xs">
               <thead>
-                <tr className="border-b border-[#252D3D] text-[#8896A4] text-[10px] uppercase tracking-wider">
+                <tr className="border-b border-border text-muted text-[10px] uppercase tracking-wider">
                   <th className="text-left py-2 px-4 font-normal">#</th>
                   <th className="text-left py-2 px-2 font-normal">Jogador</th>
                   <th className="text-left py-2 px-2 font-normal">Time</th>
@@ -255,7 +255,7 @@ function StatsTab() {
                         onClick={() => handleSort(col.key)}
                         className={cn(
                           "flex items-center gap-0.5 mx-auto transition-colors",
-                          sortKey === col.key ? "text-[#C89B3C]" : "hover:text-[#E8E8E8]"
+                          sortKey === col.key ? "text-gold" : "hover:text-text"
                         )}
                       >
                         {col.label}
@@ -269,7 +269,7 @@ function StatsTab() {
               </thead>
               <tbody>
                 <tr>
-                  <td colSpan={10} className="py-10 text-center text-[#4A5568]">
+                  <td colSpan={10} className="py-10 text-center text-muted">
                     Estatísticas de jogadores indisponíveis para este torneio.
                   </td>
                 </tr>
@@ -286,20 +286,20 @@ function StatsTab() {
 function BracketSlot({ match }: { match: TournamentMatch; gold?: boolean }) {
   const isCompleted = match.status === "completed" || match.status === "walkover" || match.status === "confirmed"
   return (
-    <div className="retro-panel p-2 space-y-1 text-[10px] font-mono">
+    <div className="panel p-2 space-y-1 text-[10px] font-mono">
       <div className={cn("flex items-center justify-between gap-2",
-        match.winner_id === match.team_a_id ? "text-[#E8E8E8]" : isCompleted ? "text-[#4A5568]" : "text-[#8896A4]"
+        match.winner_id === match.team_a_id ? "text-text" : "text-muted"
       )}>
         <span className="truncate">{match.team_a_name ?? "TBD"}</span>
-        <span className={cn("font-bold shrink-0", match.winner_id === match.team_a_id ? "text-[#00D364]" : "")}>
+        <span className={cn("font-bold shrink-0", match.winner_id === match.team_a_id ? "text-success" : "")}>
           {match.team_a_score}
         </span>
       </div>
       <div className={cn("flex items-center justify-between gap-2",
-        match.winner_id === match.team_b_id ? "text-[#E8E8E8]" : isCompleted ? "text-[#4A5568]" : "text-[#8896A4]"
+        match.winner_id === match.team_b_id ? "text-text" : "text-muted"
       )}>
         <span className="truncate">{match.team_b_name ?? "TBD"}</span>
-        <span className={cn("font-bold shrink-0", match.winner_id === match.team_b_id ? "text-[#00D364]" : "")}>
+        <span className={cn("font-bold shrink-0", match.winner_id === match.team_b_id ? "text-success" : "")}>
           {match.team_b_score}
         </span>
       </div>
@@ -337,11 +337,11 @@ function DoubleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
         {upperRounds.length > 0 && (
           <section>
             <div className="flex items-center gap-3 mb-3">
-              <span className="font-mono text-[10px] text-[#8896A4] uppercase tracking-widest">Upper Bracket</span>
-              <div className="flex-1 h-px bg-[#252D3D]" />
+              <span className="font-mono text-[10px] text-muted uppercase tracking-widest">Upper Bracket</span>
+              <div className="flex-1 h-px bg-border" />
             </div>
             <div className="flex gap-4 mb-2">
-              {upperRounds.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-[#4A5568] uppercase">{r.label}</p></div>)}
+              {upperRounds.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-muted uppercase">{r.label}</p></div>)}
             </div>
             <div className="flex gap-4" style={{ height: 280 }}>
               {upperRounds.map(r => (
@@ -356,11 +356,11 @@ function DoubleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
         {lowerRounds.length > 0 && (
           <section>
             <div className="flex items-center gap-3 mb-3">
-              <span className="font-mono text-[10px] text-[#8896A4] uppercase tracking-widest">Lower Bracket</span>
-              <div className="flex-1 h-px bg-[#252D3D]" />
+              <span className="font-mono text-[10px] text-muted uppercase tracking-widest">Lower Bracket</span>
+              <div className="flex-1 h-px bg-border" />
             </div>
             <div className="flex gap-4 mb-2">
-              {lowerRounds.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-[#4A5568] uppercase">{r.label}</p></div>)}
+              {lowerRounds.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-muted uppercase">{r.label}</p></div>)}
             </div>
             <div className="flex gap-4" style={{ height: 160 }}>
               {lowerRounds.map(r => (
@@ -375,8 +375,8 @@ function DoubleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
         {grandFinal && (
           <section>
             <div className="flex items-center gap-3 mb-3">
-              <span className="font-mono text-[10px] text-[#C89B3C] uppercase tracking-widest">Grand Final</span>
-              <div className="flex-1 h-px bg-[#C89B3C]/20" />
+              <span className="font-mono text-[10px] text-gold uppercase tracking-widest">Grand Final</span>
+              <div className="flex-1 h-px bg-gold/20" />
             </div>
             <div className="max-w-[220px]">
               <BracketSlot match={grandFinal} />
@@ -400,7 +400,7 @@ function SingleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
         {others.length > 0 && (
           <section>
             <div className="flex gap-4 mb-2">
-              {others.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-[#4A5568] uppercase">{r.label}</p></div>)}
+              {others.map(r => <div key={r.order} className="flex-1"><p className="font-mono text-[9px] text-muted uppercase">{r.label}</p></div>)}
             </div>
             <div className="flex gap-4" style={{ height: 280 }}>
               {others.map(r => (
@@ -415,8 +415,8 @@ function SingleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
         {final && (
           <section>
             <div className="flex items-center gap-3 mb-3">
-              <span className="font-mono text-[10px] text-[#C89B3C] uppercase tracking-widest">Final</span>
-              <div className="flex-1 h-px bg-[#C89B3C]/20" />
+              <span className="font-mono text-[10px] text-gold uppercase tracking-widest">Final</span>
+              <div className="flex-1 h-px bg-gold/20" />
             </div>
             <div className="max-w-[220px]">
               {final.items.map(m => <BracketSlot key={m.id} match={m} />)}
@@ -432,7 +432,7 @@ function SingleEliminationBracket({ matches }: { matches: TournamentMatch[] }) {
 function ChaveamentoTab({ matches, format }: { matches: TournamentMatch[]; format: import("@/types").TournamentFormat }) {
   if (!matches.length) {
     return (
-      <p className="text-sm text-[#4A5568] font-mono text-center py-12">
+      <p className="text-sm text-muted font-mono text-center py-12">
         O chaveamento ainda não foi gerado.
       </p>
     )
@@ -452,16 +452,31 @@ export default function CampeonatoPage() {
 
   const { data: tournament, isLoading: loadingTournament, error } = useTournament(tournamentId)
   const { data: matches = [], isLoading: loadingMatches } = useTournamentMatches(tournamentId)
+  const { data: teams = [] } = useTournamentTeams(tournamentId)
   useTournamentChannel(tournamentId)
 
   const [tab, setTab] = useState<Tab>("partidas")
-  const { user } = useAuthStore()
+  const { user, organization } = useAuthStore()
   const isAdmin = !!(user?.permissions?.is_admin_or_owner || user?.permissions?.can_manage_users)
+
+  const myTeam: TournamentTeam | undefined = teams.find(t => t.organization_id === organization?.id)
+  const canWithdraw = (
+    myTeam != null &&
+    (myTeam.status === "pending" || myTeam.status === "approved") &&
+    tournament?.status === "registration_open"
+  )
+
+  const withdrawMutation = useWithdrawTeam(tournamentId)
+  function handleWithdraw() {
+    if (!myTeam) return
+    if (!confirm("Tem certeza que deseja retirar a inscrição do campeonato? Esta ação não pode ser desfeita.")) return
+    withdrawMutation.mutate(myTeam.id)
+  }
 
   if (loadingTournament) {
     return (
       <div className="p-6 flex items-center justify-center min-h-[300px]">
-        <p className="font-mono text-xs text-[#4A5568] uppercase tracking-widest animate-pulse">
+        <p className="font-mono text-xs text-muted uppercase tracking-widest animate-pulse">
           Carregando torneio…
         </p>
       </div>
@@ -471,7 +486,7 @@ export default function CampeonatoPage() {
   if (error || !tournament) {
     return (
       <div className="p-6">
-        <p className="text-[#8896A4]">Torneio não encontrado.</p>
+        <p className="text-muted">Torneio não encontrado.</p>
       </div>
     )
   }
@@ -495,28 +510,39 @@ export default function CampeonatoPage() {
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <p className="retro-label">ArenaBR</p>
-            <h1 className="font-display text-3xl font-bold text-[#E8E8E8] uppercase tracking-wider">
+            <h1 className="font-display text-3xl font-bold text-text uppercase tracking-wider">
               {tournament.name}
             </h1>
           </div>
-          <RetroBadge variant={STATUS_VARIANT[tournament.status]}>
-            {STATUS_LABEL[tournament.status]}
-          </RetroBadge>
+          <div className="flex items-center gap-3 flex-wrap">
+            <RetroBadge variant={STATUS_VARIANT[tournament.status]}>
+              {STATUS_LABEL[tournament.status]}
+            </RetroBadge>
+            {canWithdraw && (
+              <button
+                onClick={handleWithdraw}
+                disabled={withdrawMutation.isPending}
+                className="text-xs font-mono uppercase tracking-wider text-danger border border-danger/40 px-3 py-1.5 hover:bg-danger/10 transition-colors disabled:opacity-50"
+              >
+                {withdrawMutation.isPending ? "Retirando..." : "Retirar inscrição"}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Meta row */}
         <div className="flex flex-wrap gap-4 text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-[#00D364]">
+          <div className="flex items-center gap-1.5 text-success">
             <IconDollarSign size={12} />
             <span className="font-bold">{formatCurrency(prizeBrl)}</span>
-            <span className="text-[#8896A4]">premiação</span>
+            <span className="text-muted">premiação</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[#8896A4]">
+          <div className="flex items-center gap-1.5 text-muted">
             <IconRoster size={12} />
             <span>{tournament.enrolled_teams_count}/{tournament.max_teams} times</span>
           </div>
           {tournament.scheduled_start_at && (
-            <div className="flex items-center gap-1.5 text-[#8896A4]">
+            <div className="flex items-center gap-1.5 text-muted">
               <IconCalendar size={12} />
               <span>
                 {formatDate(tournament.scheduled_start_at)}
@@ -524,7 +550,7 @@ export default function CampeonatoPage() {
               </span>
             </div>
           )}
-          <div className="flex items-center gap-1.5 text-[#8896A4]">
+          <div className="flex items-center gap-1.5 text-muted">
             <IconTrophy size={12} />
             <span className="capitalize">{formatLabel}</span>
           </div>
@@ -534,7 +560,7 @@ export default function CampeonatoPage() {
       <hr className="retro-sep" />
 
       {/* Tabs */}
-      <div role="tablist" className="flex gap-1 border-b border-[#252D3D] -mb-3 overflow-x-auto">
+      <div role="tablist" className="flex gap-1 border-b border-border -mb-3 overflow-x-auto">
         {tabs.map(t => (
           <button
             key={t.key}
@@ -544,10 +570,10 @@ export default function CampeonatoPage() {
             className={cn(
               "flex items-center gap-1.5 px-4 py-2.5 text-xs font-mono uppercase tracking-wider transition-colors whitespace-nowrap shrink-0",
               tab === t.key
-                ? "text-[#C89B3C] border-b-2 border-[#C89B3C] -mb-px"
+                ? "text-crimson border-b-2 border-crimson -mb-px"
                 : t.key === "admin"
-                  ? "text-[#8896A4] hover:text-[#C89B3C]"
-                  : "text-[#8896A4] hover:text-[#E8E8E8]",
+                  ? "text-muted hover:text-crimson"
+                  : "text-muted hover:text-text",
             )}
           >
             {t.icon}
@@ -560,17 +586,17 @@ export default function CampeonatoPage() {
       <div>
         {tab === "partidas"      && (
           loadingMatches
-            ? <p className="text-sm text-[#4A5568] font-mono text-center py-12 animate-pulse">Carregando partidas…</p>
+            ? <p className="text-sm text-muted font-mono text-center py-12 animate-pulse">Carregando partidas…</p>
             : <PartidasTab matches={matches} tournamentId={tournamentId} />
         )}
         {tab === "chaveamento"   && (
           loadingMatches
-            ? <p className="text-sm text-[#4A5568] font-mono text-center py-12 animate-pulse">Carregando chaveamento…</p>
+            ? <p className="text-sm text-muted font-mono text-center py-12 animate-pulse">Carregando chaveamento…</p>
             : <ChaveamentoTab matches={matches} format={tournament.format} />
         )}
         {tab === "classificacao" && (
           loadingMatches
-            ? <p className="text-sm text-[#4A5568] font-mono text-center py-12 animate-pulse">Carregando classificação…</p>
+            ? <p className="text-sm text-muted font-mono text-center py-12 animate-pulse">Carregando classificação…</p>
             : <ClassificacaoTab matches={matches} />
         )}
         {tab === "stats"         && <StatsTab />}

@@ -32,7 +32,7 @@ type StaffForm  = z.infer<typeof staffSchema>
 type PlayerForm = z.infer<typeof playerSchema>
 
 const REASON_BANNER: Record<string, { text: string; color: string }> = {
-  logout:       { text: "Você saiu da plataforma com sucesso.",                            color: "border-[#252D3D] text-[#8896A4]" },
+  logout:       { text: "Você saiu da plataforma com sucesso.",                            color: "border-[var(--color-border)] text-muted" },
   expired:      { text: "Sua sessão expirou por segurança. Faça login novamente.",         color: "border-yellow-600/40 text-yellow-400" },
   unauthorized: { text: "Acesso negado. Faça login para continuar.",                       color: "border-red-600/40 text-red-400" },
 }
@@ -59,21 +59,21 @@ export default function LoginPage() {
       </Suspense>
 
       <div className="text-center space-y-2">
-        <h1 className="font-display text-2xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-widest">
+        <h1 className="font-display text-2xl md:text-4xl font-bold text-[var(--color-text)] uppercase tracking-widest">
           Acessar plataforma
         </h1>
-        <p className="text-[#8896A4] text-sm md:text-base">Entre com sua conta ArenaBR</p>
+        <p className="text-muted text-sm md:text-base">Entre com sua conta ArenaBR</p>
       </div>
 
       {/* Toggle */}
-      <div className="flex border border-[#252D3D]">
+      <div className="flex border border-[var(--color-border)]">
         <button
           onClick={() => setMode("staff")}
           className={cn(
             "flex-1 flex items-center justify-center gap-2 py-3 md:py-4 text-xs md:text-sm font-mono uppercase tracking-widest transition-colors",
             mode === "staff"
-              ? "bg-[#C89B3C] text-[#0A0E1A] font-bold"
-              : "text-[#8896A4] hover:text-[#E8E8E8]"
+              ? "bg-[var(--color-crimson)] text-[var(--color-text)] font-bold"
+              : "text-muted hover:text-[var(--color-text)]"
           )}
         >
           <Users size={14} />
@@ -84,8 +84,8 @@ export default function LoginPage() {
           className={cn(
             "flex-1 flex items-center justify-center gap-2 py-3 md:py-4 text-xs md:text-sm font-mono uppercase tracking-widest transition-colors",
             mode === "player"
-              ? "bg-[#0596AA] text-[#0A0E1A] font-bold"
-              : "text-[#8896A4] hover:text-[#E8E8E8]"
+              ? "bg-[var(--color-crimson)] text-[var(--color-text)] font-bold"
+              : "text-muted hover:text-[var(--color-text)]"
           )}
         >
           <Sword size={14} />
@@ -95,9 +95,9 @@ export default function LoginPage() {
 
       {mode === "staff" ? <StaffLoginForm /> : <PlayerLoginForm />}
 
-      <p className="text-center text-sm text-[#8896A4]">
+      <p className="text-center text-sm text-muted">
         Não tem conta?{" "}
-        <Link href="/register" className="text-[#C89B3C] hover:underline">
+        <Link href="/register" className="text-crimson hover:underline">
           Cadastre-se
         </Link>
       </p>
@@ -131,7 +131,7 @@ function StaffLoginForm() {
   }
 
   return (
-    <RetroPanel variant="gold" corners>
+    <RetroPanel variant="crimson" corners>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="E-mail"
@@ -183,7 +183,7 @@ function PlayerLoginForm() {
   }
 
   return (
-    <RetroPanel variant="teal" corners>
+    <RetroPanel variant="crimson" corners>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="E-mail do jogador"
@@ -201,11 +201,7 @@ function PlayerLoginForm() {
           error={errors.password?.message}
           {...register("password")}
         />
-        <Button
-          type="submit"
-          loading={loading}
-          className="w-full mt-2 bg-[#0596AA] border-[#0596AA] hover:bg-[#047a8a]"
-        >
+        <Button type="submit" loading={loading} className="w-full mt-2">
           Entrar como Jogador
         </Button>
       </form>

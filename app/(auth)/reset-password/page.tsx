@@ -108,10 +108,10 @@ export default function ResetPasswordPage() {
   return (
     <div className="w-full max-w-sm md:max-w-md space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="font-display text-2xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-widest">
+        <h1 className="font-display text-2xl md:text-4xl font-bold text-[var(--color-text)] uppercase tracking-widest">
           Redefinir senha
         </h1>
-        <p className="text-[#8896A4] text-sm md:text-base">
+        <p className="text-muted text-sm md:text-base">
           Crie uma nova senha para sua conta
         </p>
       </div>
@@ -120,8 +120,8 @@ export default function ResetPasswordPage() {
         <ResetPasswordForm />
       </Suspense>
 
-      <p className="text-center text-sm text-[#8896A4]">
-        <Link href="/login" className="text-[#C89B3C] hover:underline">
+      <p className="text-center text-sm text-muted">
+        <Link href="/login" className="text-crimson hover:underline">
           Voltar para login
         </Link>
       </p>

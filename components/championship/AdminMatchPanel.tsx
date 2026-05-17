@@ -41,7 +41,7 @@ function DisputeModal({
   return (
     <Modal open title="Resolver disputa" onClose={onClose} size="sm">
       <div className="space-y-4">
-        <p className="text-sm text-[#8896A4]">
+        <p className="text-sm text-muted">
           Analise as evidências e escolha o vencedor.
         </p>
         <div className="space-y-2">
@@ -54,19 +54,19 @@ function DisputeModal({
                 key={team.id}
                 onClick={() => pick(team.id!, team.name)}
                 disabled={resolve.isPending}
-                className="w-full flex items-center gap-3 px-4 py-3 border border-[#252D3D] hover:border-[#00D364] hover:bg-[rgba(0,211,100,0.06)] transition-all text-left disabled:opacity-50"
+                className="w-full flex items-center gap-3 px-4 py-3 border border-border hover:border-success hover:bg-[rgba(22,163,74,0.06)] transition-all text-left disabled:opacity-50"
               >
                 <Avatar name={team.name ?? "TBD"} size="sm" />
-                <span className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm">
+                <span className="font-display font-bold text-text uppercase tracking-wider text-sm">
                   {team.name ?? "TBD"}
                 </span>
               </button>
             )
           )}
         </div>
-        <div className="retro-panel p-3 border-[#FF4444]">
-          <p className="text-xs text-[#8896A4]">
-            Esta ação é <span className="text-[#FF4444]">irreversível</span>. Confirme após análise completa.
+        <div className="panel p-3 border-danger">
+          <p className="text-xs text-muted">
+            Esta ação é <span className="text-danger">irreversível</span>. Confirme após análise completa.
           </p>
         </div>
       </div>
@@ -86,34 +86,34 @@ function AdminMatchRow({ match, tournamentId }: { match: TournamentMatch; tourna
     <>
       <RetroPanel padding={false} className={cn("overflow-hidden", isDone && !isDisputed && "opacity-60")}>
         <div className="flex items-center gap-3 px-4 py-3">
-          <span className="font-mono text-[10px] text-[#4A5568] uppercase tracking-widest w-28 shrink-0">
+          <span className="font-mono text-[10px] text-muted uppercase tracking-widest w-28 shrink-0">
             {match.round_label}
           </span>
           <div className="flex-1 flex items-center gap-2 min-w-0 font-mono text-xs">
             <span className={cn("font-display font-bold text-sm uppercase truncate",
-              match.winner_id === match.team_a_id && isDone ? "text-[#E8E8E8]" : isDone ? "text-[#4A5568]" : "text-[#E8E8E8]"
+              match.winner_id === match.team_a_id && isDone ? "text-text" : isDone ? "text-muted" : "text-text"
             )}>
               {match.team_a_name ?? "TBD"}
             </span>
-            <span className="text-[#8896A4] shrink-0">
-              <span className={match.winner_id === match.team_a_id ? "text-[#00D364] font-bold" : ""}>{match.team_a_score}</span>
+            <span className="text-muted shrink-0">
+              <span className={match.winner_id === match.team_a_id ? "text-success font-bold" : ""}>{match.team_a_score}</span>
               {" — "}
-              <span className={match.winner_id === match.team_b_id ? "text-[#00D364] font-bold" : ""}>{match.team_b_score}</span>
+              <span className={match.winner_id === match.team_b_id ? "text-success font-bold" : ""}>{match.team_b_score}</span>
             </span>
             <span className={cn("font-display font-bold text-sm uppercase truncate",
-              match.winner_id === match.team_b_id && isDone ? "text-[#E8E8E8]" : isDone ? "text-[#4A5568]" : "text-[#E8E8E8]"
+              match.winner_id === match.team_b_id && isDone ? "text-text" : isDone ? "text-muted" : "text-text"
             )}>
               {match.team_b_name ?? "TBD"}
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {isDisputed && (
-              <RetroBadge variant="gold">Disputa</RetroBadge>
+              <RetroBadge variant="danger">Disputa</RetroBadge>
             )}
             {isDisputed && hasBothTeams && (
               <Button
                 variant="ghost"
-                className="text-xs border-[#C89B3C] text-[#C89B3C] hover:bg-[rgba(200,155,60,0.08)] py-1 px-2"
+                className="text-xs border-[var(--color-crimson)] text-crimson hover:bg-[rgba(185,28,28,0.08)] py-1 px-2"
                 onClick={() => setDisputeOpen(true)}
               >
                 Resolver
@@ -123,7 +123,7 @@ function AdminMatchRow({ match, tournamentId }: { match: TournamentMatch; tourna
               <RetroBadge variant="success">{match.status === "walkover" ? "W.O." : "Encerrada"}</RetroBadge>
             )}
             {!isDone && !isDisputed && (
-              <span className="font-mono text-[10px] text-[#4A5568]">{match.status}</span>
+              <span className="font-mono text-[10px] text-muted">{match.status}</span>
             )}
           </div>
         </div>
@@ -157,20 +157,20 @@ function TeamEnrollRow({ team, tournamentId }: { team: TournamentTeam; tournamen
       <div className="flex items-center gap-3 px-4 py-3">
         <Avatar name={team.team_name} size="sm" />
         <div className="flex-1 min-w-0">
-          <p className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider text-sm">
+          <p className="font-display font-bold text-text uppercase tracking-wider text-sm">
             {team.team_name}
-            <span className="font-mono text-[10px] text-[#4A5568] ml-2 normal-case">[{team.team_tag}]</span>
+            <span className="font-mono text-[10px] text-muted ml-2 normal-case">[{team.team_tag}]</span>
           </p>
           {team.roster && team.roster.length > 0 && (
             <button
               onClick={() => setOpen(o => !o)}
-              className="font-mono text-[10px] text-[#4A5568] hover:text-[#8896A4] transition-colors"
+              className="font-mono text-[10px] text-muted hover:text-[var(--color-text)] transition-colors"
             >
               {open ? "▲" : "▼"} {team.roster.length} jogadores
             </button>
           )}
           {team.roster?.length === 0 && team.status === "pending" && (
-            <p className="font-mono text-[10px] text-[#4A5568]">Elenco será travado na aprovação</p>
+            <p className="font-mono text-[10px] text-muted">Elenco será travado na aprovação</p>
           )}
         </div>
         <RetroBadge variant={statusVariant[team.status] ?? "muted"}>
@@ -180,7 +180,7 @@ function TeamEnrollRow({ team, tournamentId }: { team: TournamentTeam; tournamen
           <div className="flex gap-2 shrink-0">
             <Button
               variant="ghost"
-              className="text-xs border-[#00D364] text-[#00D364] hover:bg-[rgba(0,211,100,0.08)] py-1 px-3"
+              className="text-xs border-success text-success hover:bg-[rgba(22,163,74,0.08)] py-1 px-3"
               disabled={approve.isPending}
               onClick={() => approve.mutate(team.id, {
                 onSuccess: () => toast.success(`${team.team_name} aprovado — elenco travado`),
@@ -191,7 +191,7 @@ function TeamEnrollRow({ team, tournamentId }: { team: TournamentTeam; tournamen
             </Button>
             <Button
               variant="ghost"
-              className="text-xs border-[#FF4444] text-[#FF4444] hover:bg-[rgba(255,68,68,0.08)] py-1 px-3"
+              className="text-xs border-danger text-danger hover:bg-[rgba(220,38,38,0.08)] py-1 px-3"
               disabled={reject.isPending}
               onClick={() => reject.mutate(team.id, {
                 onSuccess: () => toast.success(`${team.team_name} rejeitado`),
@@ -205,25 +205,25 @@ function TeamEnrollRow({ team, tournamentId }: { team: TournamentTeam; tournamen
       </div>
 
       {open && team.roster && team.roster.length > 0 && (
-        <div className="border-t border-[#252D3D] px-4 py-3 space-y-1">
+        <div className="border-t border-border px-4 py-3 space-y-1">
           {starters.length > 0 && (
             <>
-              <p className="font-mono text-[9px] uppercase tracking-widest text-[#4A5568] mb-1.5">Titulares</p>
+              <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-1.5">Titulares</p>
               {starters.map(p => (
                 <div key={p.player_id} className="flex items-center gap-2 text-xs font-mono">
-                  <span className="text-[#8896A4] uppercase text-[10px] w-16 shrink-0">{p.role}</span>
-                  <span className="text-[#E8E8E8]">{p.summoner_name}</span>
+                  <span className="text-muted uppercase text-[10px] w-16 shrink-0">{p.role}</span>
+                  <span className="text-text">{p.summoner_name}</span>
                 </div>
               ))}
             </>
           )}
           {substitutes.length > 0 && (
             <>
-              <p className="font-mono text-[9px] uppercase tracking-widest text-[#4A5568] mt-2 mb-1.5">Reservas</p>
+              <p className="font-mono text-[9px] uppercase tracking-widest text-muted mt-2 mb-1.5">Reservas</p>
               {substitutes.map(p => (
                 <div key={p.player_id} className="flex items-center gap-2 text-xs font-mono">
-                  <span className="text-[#8896A4] uppercase text-[10px] w-16 shrink-0">{p.role}</span>
-                  <span className="text-[#E8E8E8]">{p.summoner_name}</span>
+                  <span className="text-muted uppercase text-[10px] w-16 shrink-0">{p.role}</span>
+                  <span className="text-text">{p.summoner_name}</span>
                 </div>
               ))}
             </>
@@ -254,34 +254,34 @@ export default function AdminMatchPanel({ tournamentId }: { tournamentId: string
   const bracketExists = matches.length > 0
 
   if (loadingMatches || loadingTeams) {
-    return <div className="py-8 text-center font-mono text-xs text-[#4A5568] animate-pulse">Carregando…</div>
+    return <div className="py-8 text-center font-mono text-xs text-muted animate-pulse">Carregando…</div>
   }
 
   return (
     <div className="space-y-8">
       {/* Header notice */}
-      <div className="flex items-start gap-3 px-4 py-3 border border-[#C89B3C]/30 bg-[rgba(200,155,60,0.05)]">
-        <IconShield size={14} className="text-[#C89B3C] mt-0.5 shrink-0" />
-        <div className="text-xs text-[#8896A4] leading-relaxed">
-          <strong className="text-[#E8E8E8]">Painel de árbitro</strong> — somente staff autorizado da ArenaBR.
+      <div className="flex items-start gap-3 px-4 py-3 border border-gold/30 bg-[rgba(200,155,60,0.05)]">
+        <IconShield size={14} className="text-gold mt-0.5 shrink-0" />
+        <div className="text-xs text-muted leading-relaxed">
+          <strong className="text-text">Painel de árbitro</strong> — somente staff autorizado da ArenaBR.
         </div>
       </div>
 
       {/* ── Inscrições de times ── */}
       <section className="space-y-3">
         <div className="flex items-center gap-3">
-          <IconRoster size={13} className="text-[#8896A4]" />
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+          <IconRoster size={13} className="text-muted" />
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">
             Inscrições de times
           </span>
           {pendingTeams.length > 0 && (
             <RetroBadge variant="gold">{pendingTeams.length} pendente{pendingTeams.length > 1 ? "s" : ""}</RetroBadge>
           )}
-          <div className="flex-1 h-px bg-[#252D3D]" />
+          <div className="sep" />
         </div>
 
         {teams.length === 0 ? (
-          <p className="text-sm text-[#4A5568] font-mono text-center py-4">Nenhum time inscrito ainda.</p>
+          <p className="text-sm text-muted font-mono text-center py-4">Nenhum time inscrito ainda.</p>
         ) : (
           <div className="space-y-2">
             {/* Pending primeiro */}
@@ -297,20 +297,20 @@ export default function AdminMatchPanel({ tournamentId }: { tournamentId: string
       {/* ── Gerar bracket ── */}
       <section className="space-y-3">
         <div className="flex items-center gap-3">
-          <IconTrophy size={13} className="text-[#C89B3C]" />
-          <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">Bracket</span>
-          <div className="flex-1 h-px bg-[#252D3D]" />
+          <IconTrophy size={13} className="text-gold" />
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">Bracket</span>
+          <div className="sep" />
         </div>
 
         {bracketExists ? (
-          <div className="flex items-center gap-3 px-4 py-3 border border-[#00D364]/20 bg-[rgba(0,211,100,0.04)]">
-            <span className="text-[#00D364]">✓</span>
-            <span className="text-sm font-mono text-[#00D364]">Bracket gerado — {matches.length} partidas</span>
+          <div className="flex items-center gap-3 px-4 py-3 border border-success/20 bg-[rgba(22,163,74,0.04)]">
+            <span className="text-success">✓</span>
+            <span className="text-sm font-mono text-success">Bracket gerado — {matches.length} partidas</span>
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="text-xs text-[#8896A4]">
-              Times aprovados: <strong className="text-[#E8E8E8]">{approvedTeams.length}</strong>.
+            <p className="text-xs text-muted">
+              Times aprovados: <strong className="text-text">{approvedTeams.length}</strong>.
               Gere o bracket quando todas as vagas estiverem preenchidas.
             </p>
             <Button
@@ -332,9 +332,9 @@ export default function AdminMatchPanel({ tournamentId }: { tournamentId: string
       {disputed.length > 0 && (
         <section className="space-y-3">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#C89B3C]">Disputas pendentes</span>
-            <RetroBadge variant="gold">{disputed.length}</RetroBadge>
-            <div className="flex-1 h-px bg-[#C89B3C]/20" />
+            <span className="font-mono text-xs uppercase tracking-widest text-danger">Disputas pendentes</span>
+            <RetroBadge variant="danger">{disputed.length}</RetroBadge>
+            <div className="sep" />
           </div>
           <div className="space-y-2">
             {disputed.map(m => <AdminMatchRow key={m.id} match={m} tournamentId={tournamentId} />)}
@@ -346,14 +346,14 @@ export default function AdminMatchPanel({ tournamentId }: { tournamentId: string
       {bracketExists && (
         <section className="space-y-3">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">
+            <span className="font-mono text-xs uppercase tracking-widest text-muted">
               Em andamento / Aguardando
             </span>
-            <span className="font-mono text-[10px] text-[#4A5568]">({pending.length})</span>
-            <div className="flex-1 h-px bg-[#252D3D]" />
+            <span className="font-mono text-[10px] text-muted">({pending.length})</span>
+            <div className="sep" />
           </div>
           {pending.length === 0 ? (
-            <p className="text-sm text-[#4A5568] font-mono text-center py-4">Nenhuma partida pendente.</p>
+            <p className="text-sm text-muted font-mono text-center py-4">Nenhuma partida pendente.</p>
           ) : (
             <div className="space-y-2">
               {pending.map(m => <AdminMatchRow key={m.id} match={m} tournamentId={tournamentId} />)}
@@ -366,9 +366,9 @@ export default function AdminMatchPanel({ tournamentId }: { tournamentId: string
       {completed.length > 0 && (
         <section className="space-y-3">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#8896A4]">Encerradas</span>
-            <span className="font-mono text-[10px] text-[#4A5568]">({completed.length})</span>
-            <div className="flex-1 h-px bg-[#252D3D]" />
+            <span className="font-mono text-xs uppercase tracking-widest text-muted">Encerradas</span>
+            <span className="font-mono text-[10px] text-muted">({completed.length})</span>
+            <div className="sep" />
           </div>
           <div className="space-y-2">
             {completed.map(m => <AdminMatchRow key={m.id} match={m} tournamentId={tournamentId} />)}

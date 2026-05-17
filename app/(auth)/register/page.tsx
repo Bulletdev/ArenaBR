@@ -48,10 +48,10 @@ export default function RegisterPage() {
   return (
     <div className="w-full max-w-sm md:max-w-md space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="font-display text-2xl md:text-4xl font-bold text-[#E8E8E8] uppercase tracking-widest">
+        <h1 className="font-display text-2xl md:text-4xl font-bold text-[var(--color-text)] uppercase tracking-widest">
           Criar conta
         </h1>
-        <p className="text-[#8896A4] text-sm md:text-base">Junte-se à ArenaBR e comece a competir</p>
+        <p className="text-muted text-sm md:text-base">Junte-se à ArenaBR e comece a competir</p>
       </div>
 
       {!accountType ? (
@@ -62,9 +62,9 @@ export default function RegisterPage() {
         <StaffForm onBack={() => setAccountType(null)} />
       )}
 
-      <p className="text-center text-sm text-[#8896A4]">
+      <p className="text-center text-sm text-muted">
         Já tem conta?{" "}
-        <Link href="/login" className="text-[#C89B3C] hover:underline">
+        <Link href="/login" className="text-crimson hover:underline">
           Entrar
         </Link>
       </p>
@@ -78,26 +78,26 @@ function AccountTypeSelect({ onSelect }: { onSelect: (t: AccountType) => void })
     <div className="grid grid-cols-1 gap-3">
       <button
         onClick={() => onSelect("player")}
-        className="retro-panel border-[#252D3D] p-5 text-left hover:border-[#0596AA] hover:bg-[#1A2235] transition-all"
+        className="panel border-[var(--color-border)] p-5 text-left hover:border-[var(--color-crimson-dim)] hover:bg-[var(--color-elevated)] transition-all"
       >
-        <Sword size={22} className="text-[#0596AA] mb-3" />
-        <p className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider">
+        <Sword size={22} className="text-crimson mb-3" />
+        <p className="font-display font-bold text-[var(--color-text)] uppercase tracking-wider">
           Sou jogador
         </p>
-        <p className="text-xs text-[#8896A4] mt-1 leading-relaxed">
+        <p className="text-xs text-muted mt-1 leading-relaxed">
           Cadastre seu Riot ID, entre como Free Agent ou com código de convite do seu time.
         </p>
       </button>
 
       <button
         onClick={() => onSelect("staff")}
-        className="retro-panel border-[#252D3D] p-5 text-left hover:border-[#C89B3C] hover:bg-[#1A2235] transition-all"
+        className="panel border-[var(--color-border)] p-5 text-left hover:border-[var(--color-crimson-dim)] hover:bg-[var(--color-elevated)] transition-all"
       >
-        <Users size={22} className="text-[#C89B3C] mb-3" />
-        <p className="font-display font-bold text-[#E8E8E8] uppercase tracking-wider">
+        <Users size={22} className="text-crimson mb-3" />
+        <p className="font-display font-bold text-[var(--color-text)] uppercase tracking-wider">
           Sou coach / analista / owner
         </p>
-        <p className="text-xs text-[#8896A4] mt-1 leading-relaxed">
+        <p className="text-xs text-muted mt-1 leading-relaxed">
           Gerencie seu time, inscreva o elenco em campeonatos e acompanhe a performance.
         </p>
       </button>
@@ -137,10 +137,10 @@ function PlayerForm({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <RetroPanel variant="teal" corners>
+    <RetroPanel variant="crimson" corners>
       <button
         onClick={onBack}
-        className="text-xs text-[#8896A4] hover:text-[#E8E8E8] transition-colors mb-4 block"
+        className="text-xs text-muted hover:text-[var(--color-text)] transition-colors mb-4 block"
       >
         ← Voltar
       </button>
@@ -234,10 +234,10 @@ function StaffForm({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <RetroPanel variant="gold" corners>
+    <RetroPanel variant="crimson" corners>
       <button
         onClick={onBack}
-        className="text-xs text-[#8896A4] hover:text-[#E8E8E8] transition-colors mb-4 block"
+        className="text-xs text-muted hover:text-[var(--color-text)] transition-colors mb-4 block"
       >
         ← Voltar
       </button>

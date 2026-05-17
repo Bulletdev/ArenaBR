@@ -21,16 +21,16 @@ const STATUS_LABEL: Record<string, string> = {
   walkover:         "W.O.",
 }
 
-const STATUS_VARIANT: Record<string, "muted" | "success" | "teal" | "gold"> = {
-  scheduled:        "muted",
-  checkin_open:     "teal",
-  in_progress:      "teal",
-  awaiting_report:  "gold",
-  awaiting_confirm: "gold",
-  disputed:         "gold",
+const STATUS_VARIANT: Record<string, "muted" | "success" | "crimson" | "gold" | "danger"> = {
+  scheduled:        "crimson",
+  checkin_open:     "crimson",
+  in_progress:      "success",
+  awaiting_report:  "muted",
+  awaiting_confirm: "muted",
+  disputed:         "danger",
   confirmed:        "success",
   completed:        "success",
-  walkover:         "muted",
+  walkover:         "danger",
 }
 
 // ─── Match Card ───────────────────────────────────────────────
@@ -45,14 +45,14 @@ const MatchCard = memo(function MatchCard({
   const hasDeadline = match.checkin_deadline_at && match.status === "checkin_open"
 
   const inner = (
-    <div className={cn("retro-panel overflow-hidden", tournamentId && "hover:border-[#0596AA]/40 transition-colors")}>
+    <div className={cn("panel overflow-hidden", tournamentId && "hover:border-crimson/40 transition-colors")}>
       <div className="flex items-center gap-3 px-4 py-3">
         {/* Team A */}
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <Avatar name={match.team_a_name ?? "TBD"} size="sm" />
           <span className={cn(
             "font-display font-bold text-sm uppercase tracking-wider truncate",
-            match.winner_id === match.team_a_id ? "text-[#E8E8E8]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]",
+            match.winner_id === match.team_a_id ? "text-text" : isCompleted ? "text-muted" : "text-text",
           )}>
             {match.team_a_name ?? "TBD"}
           </span>
@@ -60,11 +60,11 @@ const MatchCard = memo(function MatchCard({
 
         {/* Score */}
         <div className="flex items-center gap-2 shrink-0 font-mono text-sm font-bold">
-          <span className={match.winner_id === match.team_a_id ? "text-[#00D364]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]"}>
+          <span className={match.winner_id === match.team_a_id ? "text-success" : isCompleted ? "text-muted" : "text-text"}>
             {match.team_a_score}
           </span>
-          <span className="text-[#252D3D] text-xs">:</span>
-          <span className={match.winner_id === match.team_b_id ? "text-[#00D364]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]"}>
+          <span className="text-border text-xs">:</span>
+          <span className={match.winner_id === match.team_b_id ? "text-success" : isCompleted ? "text-muted" : "text-text"}>
             {match.team_b_score}
           </span>
         </div>
@@ -73,7 +73,7 @@ const MatchCard = memo(function MatchCard({
         <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
           <span className={cn(
             "font-display font-bold text-sm uppercase tracking-wider truncate text-right",
-            match.winner_id === match.team_b_id ? "text-[#E8E8E8]" : isCompleted ? "text-[#4A5568]" : "text-[#E8E8E8]",
+            match.winner_id === match.team_b_id ? "text-text" : isCompleted ? "text-muted" : "text-text",
           )}>
             {match.team_b_name ?? "TBD"}
           </span>
@@ -86,14 +86,14 @@ const MatchCard = memo(function MatchCard({
             {STATUS_LABEL[match.status] ?? match.status}
           </RetroBadge>
           {tournamentId && (
-            <span className="text-[#4A5568] text-xs font-mono">›</span>
+            <span className="text-muted text-xs font-mono">›</span>
           )}
         </div>
       </div>
 
       {/* Checkin deadline */}
       {hasDeadline && (
-        <div className="flex items-center gap-1.5 px-4 pb-2 text-[10px] font-mono text-[#0596AA]">
+        <div className="flex items-center gap-1.5 px-4 pb-2 text-[10px] font-mono text-crimson">
           <IconCalendar size={10} />
           Check-in até {formatDatetime(match.checkin_deadline_at!)}
         </div>
@@ -101,7 +101,7 @@ const MatchCard = memo(function MatchCard({
 
       {/* BO format */}
       <div className="px-4 pb-2">
-        <span className="font-mono text-[10px] text-[#4A5568]">BO{match.bo_format}</span>
+        <span className="font-mono text-[10px] text-muted">BO{match.bo_format}</span>
       </div>
     </div>
   )

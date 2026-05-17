@@ -37,14 +37,14 @@ export default function Modal({ open, onClose, title, children, size = "md" }: M
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[#0A0E1A]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-[rgba(9,9,11,0.8)] backdrop-blur-sm"
             onClick={onClose}
           />
 
           {/* Panel */}
           <motion.div
             className={cn(
-              "relative w-full retro-panel-gold hud-corners",
+              "relative w-full panel-crimson bracket-corners",
               sizeClass[size]
             )}
             initial={{ scale: 0.95, opacity: 0, y: 8 }}
@@ -54,14 +54,14 @@ export default function Modal({ open, onClose, title, children, size = "md" }: M
           >
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[#252D3D]">
-                <h2 className="font-display text-lg font-bold text-[#C89B3C] uppercase tracking-widest">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+                <h2 className="font-display text-lg font-bold text-crimson uppercase tracking-widest">
                   {title}
                 </h2>
                 <button
                   onClick={onClose}
                   aria-label="Fechar"
-                  className="text-[#8896A4] hover:text-[#E8E8E8] transition-colors"
+                  className="text-muted hover:text-text transition-colors"
                 >
                   <X size={18} />
                 </button>

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 interface RetroPanelProps {
   children: React.ReactNode
   className?: string
-  variant?: "default" | "gold" | "teal"
+  variant?: "default" | "gold" | "crimson"
   corners?: boolean
   padding?: boolean
 }
@@ -17,16 +17,16 @@ export default function RetroPanel({
 }: RetroPanelProps) {
   const variantClass =
     variant === "gold"
-      ? "retro-panel-gold"
-      : variant === "teal"
-      ? "retro-panel-teal"
-      : "retro-panel"
+      ? "panel-gold"
+      : variant === "crimson"
+      ? "panel-crimson"
+      : "panel"
 
   return (
     <div
       className={cn(
         variantClass,
-        corners && "hud-corners",
+        corners && "bracket-corners",
         padding && "p-5",
         className
       )}
