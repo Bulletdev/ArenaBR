@@ -1,8 +1,6 @@
-// ProPay API client — PIX payment gateway
-// Auth: JWT from arena_token cookie (same token as prostaff-api)
-// Mutations MUST include Idempotency-Key header (crypto.randomUUID())
-
-const PROPAY_URL = process.env.NEXT_PUBLIC_PROPAY_URL ?? "http://localhost:3000/v1"
+// ProPay API client — routed via prostaff-api proxy
+// Chain: browser → /api/wallet/* (Next.js) → prostaff-api → ProPay
+// Auth handled server-side via arena_token cookie injection
 
 // ─── Domain types ─────────────────────────────────────────────
 
@@ -53,32 +51,20 @@ export interface FinancialReport {
   distributed_at?: string
 }
 
-// ─── Cookie helper ────────────────────────────────────────────
-
-function getCookie(name: string): string | null {
-  if (typeof document === "undefined") return null
-  const match = document.cookie
-    .split("; ")
-    .find(row => row.startsWith(`${name}=`))
-  return match ? decodeURIComponent(match.split("=")[1]) : null
-}
-
 // ─── Fetch wrapper ────────────────────────────────────────────
 
 async function propayFetch<T>(
   path: string,
   options: RequestInit & { idempotent?: boolean } = {},
 ): Promise<T> {
-  const token = getCookie("arena_token")
   const { idempotent, ...fetchOptions } = options
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(idempotent ? { "Idempotency-Key": crypto.randomUUID() } : {}),
   }
 
-  const res = await fetch(`${PROPAY_URL}${path}`, {
+  const res = await fetch(path, {
     ...fetchOptions,
     headers: { ...headers, ...(fetchOptions.headers as Record<string, string> ?? {}) },
   })
@@ -95,31 +81,31 @@ async function propayFetch<T>(
 
 export const propayApi = {
   getWallet: () =>
-    propayFetch<{ data: { balance_cents: number } }>("/wallet"),
+    propayFetch<{ data: { balance_cents: number } }>("/api/wallet"),
 
   getTransactions: () =>
-    propayFetch<{ data: Transaction[] }>("/wallet/transactions"),
+    propayFetch<{ data: Transaction[] }>("/api/wallet/transactions"),
 
   deposit: (amount_cents: number) =>
-    propayFetch<{ data: ChargeData }>("/wallet/deposit", {
+    propayFetch<{ data: ChargeData }>("/api/wallet/deposit", {
       method: "POST",
       idempotent: true,
       body: JSON.stringify({ amount_cents }),
     }),
 
   getCharge: (txid: string) =>
-    propayFetch<{ data: ChargeData }>(`/charges/${txid}`),
+    propayFetch<{ data: ChargeData }>(`/api/wallet/charges/${txid}`),
 
   requestPayout: (data: PayoutRequest) =>
-    propayFetch<{ data: PayoutData }>("/wallet/payouts", {
+    propayFetch<{ data: PayoutData }>("/api/wallet/payouts", {
       method: "POST",
       idempotent: true,
       body: JSON.stringify(data),
     }),
 
   getPayout: (id: string) =>
-    propayFetch<{ data: PayoutData }>(`/wallet/payouts/${id}`),
+    propayFetch<{ data: PayoutData }>(`/api/wallet/payouts/${id}`),
 
   getTournamentFinancialReport: (tournamentId: string) =>
-    propayFetch<{ data: FinancialReport }>(`/tournaments/${tournamentId}/financial_report`),
+    propayFetch<{ data: FinancialReport }>(`/api/wallet/tournament-report/${tournamentId}`),
 }
