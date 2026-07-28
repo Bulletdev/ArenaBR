@@ -13,7 +13,7 @@
     "@tanstack/react-query": "^5.97.0",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.468.0",
-    "next": "^16.2.6",
+    "next": "^16.2.11",
     "phoenix": "^1.8.7",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
